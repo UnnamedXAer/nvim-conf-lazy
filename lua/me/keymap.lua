@@ -27,5 +27,20 @@ vim.keymap.set("n", "<leader>f", function()
 	vim.lsp.buf.format()
 end)
 
+vim.keymap.set("n", "gh", function()
+	vim.lsp.buf.hover()
+end, { remap = false, desc = "Trigger hover popoup, use twice to focus that popup to be eable e.g. to scroll it." })
+vim.keymap.set("n", "<F2>", function()
+	vim.lsp.buf.rename()
+end, { remap = false })
+
 -- append to all words that match word under curosor
 vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+
+-- close popups like hover with q when focussed (2x gh)
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "dap-float",
+	callback = function()
+		vim.api.nvim_buf_set_keymap(0, "n", "q", "<cmd>close!<CR>", { noremap = true, silent = true })
+	end,
+})
