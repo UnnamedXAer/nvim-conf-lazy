@@ -18,7 +18,9 @@ vim.opt.wrap = true
 
 vim.opt.swapfile = false
 vim.opt.backup = false
+if jit and jit.os == "Windows" then
 vim.undodir = os.getenv("TMP") .. "/.vim/undodir" -- long memory for undodir
+end
 vim.opt.undofile = true
 
 vim.opt.hlsearch = false
