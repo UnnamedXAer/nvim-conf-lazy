@@ -56,4 +56,5 @@ vim.opt.cursorline = true
 vim.opt.shortmess:append("sI")
 
 require("me.keymap")
+require("me.other")
 require("me.lazy")

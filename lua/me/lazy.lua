@@ -39,7 +39,7 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install plugins.
 require("lazy").setup({
-	-- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
+	-- Plugins can be added with a link (or for a github repo: 'owner/repo' link).
 	-- 'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 	--
 	--    require('gitsigns').setup({ ... })
@@ -57,7 +57,7 @@ require("lazy").setup({
 		},
 	},
 
-	-- NOTE: Plugins can specify dependencies.
+	-- Plugins can specify dependencies.
 	--
 	-- The dependencies are proper plugin specifications as well - anything
 	-- you do for a plugin at the top level, you can do for a dependency.
@@ -249,7 +249,7 @@ require("lazy").setup({
 
 					-- Rename the variable under your cursor.
 					--  Most Language Servers support renaming across files, etc.
-					map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+					-- map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 
 					-- Execute a code action, usually your cursor needs to be on top of an error
 					-- or a suggestion from your LSP for this to activate.
@@ -400,6 +400,9 @@ require("lazy").setup({
 				local disable_filetypes = {
 					-- c = true,
 					-- cpp = true,
+					js = true,
+					sql = true,
+					jsp = true,
 				}
 
 				local lsp_format_opt
@@ -419,7 +422,7 @@ require("lazy").setup({
 				-- python = { "isort", "black" },
 				--
 				-- You can use 'stop_after_first' to run the first available formatter from the list
-				-- javascript = { "prettierd", "prettier", stop_after_first = true },
+				javascript = { "prettierd", "prettier", stop_after_first = true },
 			},
 		},
 	},
@@ -541,21 +544,37 @@ require("lazy").setup({
 		end,
 	},
 
-	{ -- You can easily change to a different colorscheme.
-		-- Change the name of the colorscheme plugin below, and then
-		-- change the command in the config to whatever the name of that colorscheme is.
-		--
-		-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-		"folke/tokyonight.nvim",
-		priority = 1000, -- Make sure to load this before all the other start plugins.
-		init = function()
-			-- Load the colorscheme here.
-			-- Like many other themes, this one has different styles, and you could load
-			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-			vim.cmd.colorscheme("tokyonight-night")
+	-- { -- You can easily change to a different colorscheme.
+	-- 	-- Change the name of the colorscheme plugin below, and then
+	-- 	-- change the command in the config to whatever the name of that colorscheme is.
+	-- 	--
+	-- 	-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+	-- 	"folke/tokyonight.nvim",
+	-- 	priority = 1000, -- Make sure to load this before all the other start plugins.
+	-- 	init = function()
+	-- 		-- Load the colorscheme here.
+	-- 		-- Like many other themes, this one has different styles, and you could load
+	-- 		-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+	-- 		-- vim.cmd.colorscheme("tokyonight-night")
+	--
+	-- 		-- You can configure highlights by doing something like:
+	-- 		vim.cmd.hi("Comment gui=none")
+	-- 	end,
+	-- },
+	-- { "ellisonleao/gruvbox.nvim", priority = 1000, config = true },
+	{
+		"neanias/everforest-nvim",
+		version = false,
+		lazy = false,
+		priority = 1000, -- make sure to load this before all the other start plugins
+		-- Optional; default configuration will be used if setup isn't called.
+		config = function()
+			---@diagnostic disable-next-line: missing-fields
+			require("everforest").setup({
+				background = "hard",
+			})
 
-			-- You can configure highlights by doing something like:
-			vim.cmd.hi("Comment gui=none")
+			vim.cmd.colorscheme("everforest")
 		end,
 	},
 
@@ -597,20 +616,20 @@ require("lazy").setup({
 			-- - sr)'  - [S]urround [R]eplace [)] [']
 			require("mini.surround").setup()
 
-			-- Simple and easy statusline.
-			--  You could remove this setup call if you don't like it,
-			--  and try some other statusline plugin
-			local statusline = require("mini.statusline")
-			-- set use_icons to true if you have a Nerd Font
-			statusline.setup({ use_icons = vim.g.have_nerd_font })
-
-			-- You can configure sections in the statusline by overriding their
-			-- default behavior. For example, here we set the section for
-			-- cursor location to LINE:COLUMN
-			---@diagnostic disable-next-line: duplicate-set-field
-			statusline.section_location = function()
-				return "%2l:%-2v"
-			end
+			-- -- Simple and easy statusline.
+			-- --  You could remove this setup call if you don't like it,
+			-- --  and try some other statusline plugin
+			-- local statusline = require("mini.statusline")
+			-- -- set use_icons to true if you have a Nerd Font
+			-- statusline.setup({ use_icons = vim.g.have_nerd_font })
+			--
+			-- -- You can configure sections in the statusline by overriding their
+			-- -- default behavior. For example, here we set the section for
+			-- -- cursor location to LINE:COLUMN
+			-- ---@diagnostic disable-next-line: duplicate-set-field
+			-- statusline.section_location = function()
+			-- 	return "%2l:%-2v"
+			-- end
 
 			-- ... and there is more!
 			--  Check out: https://github.com/echasnovski/mini.nvim
@@ -701,7 +720,99 @@ require("lazy").setup({
 			"3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
 		},
 	},
+
+	-- session (aka opened buffers auto save and restore)
+	{
+		"nyngwang/suave.lua",
+		config = function()
+			require("suave").setup({
+				-- menu_height = 6,
+				auto_save = {
+					enabled = true,
+					-- exclude_filetypes = {},
+				},
+				store_hooks = {
+					-- WARN: DON'T call `vim.cmd('wa')` here. Use `setup.auto_save` instead. (See #4)
+					before_mksession = {
+
+						print("before session"),
+
+						-- function ()
+						--   -- `rcarriga/nvim-dap-ui`.
+						--   require('dapui').close()
+						-- end,
+						-- function ()
+						--   -- `nvim-neo-tree/neo-tree.nvim`.
+						--   for _, w in ipairs(vim.api.nvim_list_wins()) do
+						--     if vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(w), 'ft') == 'neo-tree' then
+						--       vim.api.nvim_win_close(w, false)
+						--     end
+						--   end
+						-- end,
+					},
+					after_mksession = {
+						-- NOTE: the `data` param is Lua table, which will be stored in json format under `.suave/` folder.
+						function(data)
+							print("after session")
+							-- store current colorscheme.
+							data.colorscheme = vim.g.colors_name
+						end,
+					},
+				},
+				restore_hooks = {
+					after_source = {
+						function(data)
+							print("after source hook")
+							if not data then
+								return
+							end
+							-- restore colorscheme.
+							vim.cmd(string.format(
+								[[
+              color %s
+              doau ColorScheme %s
+            ]],
+								data.colorscheme,
+								data.colorscheme
+							))
+						end,
+					},
+				},
+			})
+		end,
+	},
+
+	{
+		"jiaoshijie/undotree",
+		dependencies = "nvim-lua/plenary.nvim",
+		-- config = true,
+		keys = { -- load the plugin only when using it's keybinding:
+			{ "<leader>u", "<cmd>lua require('undotree').toggle()<cr>" },
+		},
+		config = function()
+			require("undotree").setup({
+				window = {
+					winblend = 5,
+				},
+			})
+		end,
+	},
+
+	-- status line
+	{
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = function()
+			local custom_gruvbox = require("lualine.themes.everforest")
+			custom_gruvbox.normal.c.bg = "#112233"
+			require("lualine").setup({
+				options = { theme = custom_gruvbox },
+			})
+		end,
+	},
 })
+
+-- vim.cmd([[colorscheme everforest]])
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

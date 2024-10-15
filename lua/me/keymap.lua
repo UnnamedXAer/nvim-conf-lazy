@@ -19,6 +19,20 @@ vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right win
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
+-- better go down (does not skip wrapped part of a line)
+vim.keymap.set(
+	{ "n", "v" },
+	"j",
+	"v:count == 0 ? 'gj' : 'j'",
+	{ desc = "General | Better down", expr = true, silent = true }
+)
+vim.keymap.set(
+	{ "n", "v" },
+	"k",
+	"v:count == 0 ? 'gk' : 'k'",
+	{ desc = "General | Better up", expr = true, silent = true }
+)
+
 -- other
 -- Diagnostic keymaps
 -- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
@@ -35,12 +49,6 @@ vim.keymap.set("n", "<F2>", function()
 end, { remap = false })
 
 -- append to all words that match word under curosor
-vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+-- vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 
--- close popups like hover with q when focussed (2x gh)
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "dap-float",
-	callback = function()
-		vim.api.nvim_buf_set_keymap(0, "n", "q", "<cmd>close!<CR>", { noremap = true, silent = true })
-	end,
-})
+vim.api.nvim_set_keymap("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>", {})
