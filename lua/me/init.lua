@@ -4,6 +4,9 @@ vim.g.maplocalleader = " "
 
 --vim.opt.guicursor = "" -- fat cursor in insert mode
 
+-- Set to true if you have a Nerd Font installed and selected in the terminal
+vim.g.have_nerd_font = true
+
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
@@ -19,7 +22,7 @@ vim.opt.wrap = true
 vim.opt.swapfile = false
 vim.opt.backup = false
 if jit and jit.os == "Windows" then
-vim.undodir = os.getenv("TMP") .. "/.vim/undodir" -- long memory for undodir
+	vim.undodir = os.getenv("TMP") .. "/.vim/undodir" -- long memory for undodir
 end
 vim.opt.undofile = true
 
