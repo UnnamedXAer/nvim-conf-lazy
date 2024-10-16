@@ -378,6 +378,7 @@ require("lazy").setup({
 	},
 
 	{ -- Autoformat
+		-- TODO: we need to have abiliti to format sellection - not whole buffer;
 		"stevearc/conform.nvim",
 		event = { "BufWritePre" },
 		cmd = { "ConformInfo" },
@@ -394,6 +395,23 @@ require("lazy").setup({
 		opts = {
 			notify_on_error = false,
 			format_on_save = function(bufnr)
+				-- here is something to read about disabling:
+				-- https://github.com/stevearc/conform.nvim/blob/master/doc/recipes.md#command-to-toggle-format-on-save
+
+				-- this would be the simplest way to disable formatter on save, the `disable_filetypes` triggers warning
+				-- local disable_on_save_filetypes = {
+				-- 	js = true,
+				-- 	javascript= true,
+				-- 	sql = true,
+				-- 	jsp = true,
+				-- }
+				-- if disable_on_save_filetypes[vim.bo[bufnr].filetype] then
+				-- print("formt_on_save: skipping...")
+				-- 	return
+				-- end
+
+				--  print("formt_on_save: "..(vim.bo[bufnr].filetype))
+
 				-- Disable "format_on_save lsp_fallback" for languages that don't
 				-- have a well standardized coding style. You can add additional
 				-- languages here or re-enable it for the disabled ones.
@@ -401,6 +419,7 @@ require("lazy").setup({
 					-- c = true,
 					-- cpp = true,
 					js = true,
+					javascript = true,
 					sql = true,
 					jsp = true,
 				}
@@ -423,6 +442,7 @@ require("lazy").setup({
 				--
 				-- You can use 'stop_after_first' to run the first available formatter from the list
 				javascript = { "prettierd", "prettier", stop_after_first = true },
+				["*"] = { "codespell" },
 			},
 		},
 	},
