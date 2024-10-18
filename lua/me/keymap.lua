@@ -4,6 +4,8 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 vim.keymap.set("i", "<C-c>", "<Esc>") -- makes Esc exactly the same as Ctrl-c
 
+vim.keymap.set("i", "jk", "<Esc>") -- quick Esc when typing
+
 -- copy/paste
 vim.keymap.set({ "n", "v" }, "<leader>v", '"+p')
 vim.keymap.set("v", "<leader>c", '"+y')

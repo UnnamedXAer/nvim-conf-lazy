@@ -141,8 +141,6 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "Search Recent Open Files" })
 			vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "Search Resume" })
 
-			vim.keymap.set("n", "<leader>fs", builtin.lsp_document_symbols, { desc = "Find document Symbols (lsp)" })
-
 			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "Find existing buffers" })
 
 			-- vim.keymap.set("n", "<leader>fi", "<cmd>AdvancedGitSearch<CR>", { desc = "Search git" })
@@ -163,17 +161,17 @@ require("lazy").setup({
 
 			-- It's also possible to pass additional configuration options.
 			--  See `:help telescope.builtin.live_grep()` for information about particular keys
-			vim.keymap.set("n", "<leader>s/", function()
+			vim.keymap.set("n", "<leader>f/", function()
 				builtin.live_grep({
 					grep_open_files = true,
 					prompt_title = "Live Grep in Open Files",
 				})
-			end, { desc = "[S]earch [/] in Open Files" })
+			end, { desc = "Search / in Open Files" })
 
 			-- Shortcut for searching your Neovim configuration files
-			vim.keymap.set("n", "<leader>sn", function()
+			vim.keymap.set("n", "<leader>fc", function()
 				builtin.find_files({ cwd = vim.fn.stdpath("config") })
-			end, { desc = "[S]earch [N]eovim files" })
+			end, { desc = "Search Neovim files" })
 		end,
 	},
 
@@ -386,7 +384,7 @@ require("lazy").setup({
 	},
 
 	{ -- Autoformat
-		-- TODO: we need to have abiliti to format sellection - not whole buffer;
+		-- TODO: I need to have abiliti to format sellection - not whole buffer;
 		"stevearc/conform.nvim",
 		event = { "BufWritePre" },
 		cmd = { "ConformInfo" },
@@ -401,7 +399,7 @@ require("lazy").setup({
 			},
 		},
 		opts = {
-			notify_on_error = false,
+			notify_on_error = true,
 			format_on_save = function(bufnr)
 				-- here is something to read about disabling:
 				-- https://github.com/stevearc/conform.nvim/blob/master/doc/recipes.md#command-to-toggle-format-on-save
