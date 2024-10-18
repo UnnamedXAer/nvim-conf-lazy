@@ -85,6 +85,8 @@ require("lazy").setup({
 			},
 			{ "nvim-telescope/telescope-ui-select.nvim" },
 
+			{ "nvim-telescope/telescope-live-grep-args.nvim" },
+
 			-- Useful for getting pretty icons, but requires a Nerd Font.
 			{ "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
 		},
@@ -110,15 +112,34 @@ require("lazy").setup({
 
 			-- [[ Configure Telescope ]]
 			-- See `:help telescope` and `:help telescope.setup()`
-			require("telescope").setup({
+			local telescope = require("telescope")
+			local telescopeConfig = require("telescope.config")
+
+			local vimGrepArguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
+
+			-- I want to search in hidden/dot files
+			table.insert(vimGrepArguments, "--hidden")
+			-- I don't want to search in .git directory
+			table.insert(vimGrepArguments, "--glob")
+			table.insert(vimGrepArguments, "!**/.git/*")
+
+			local telescopeActions = require("telescope.actions")
+
+			telescope.setup({
 				-- You can put your default mappings / updates / etc. in here
 				--  All the info you're looking for is in `:help telescope.setup()`
 				--
-				-- defaults = {
-				--   mappings = {
-				--     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-				--   },
-				-- },
+				defaults = {
+					-- hidden = true - is not supported in text grep commands
+					vimgrep_arguments = vimGrepArguments,
+					mappings = {
+						-- i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+						i = {
+							["<C-k>"] = telescopeActions.move_selection_previous,
+							["<C-j>"] = telescopeActions.move_selection_next,
+						},
+					},
+				},
 				-- pickers = {}
 				extensions = {
 					["ui-select"] = {
@@ -128,14 +149,26 @@ require("lazy").setup({
 			})
 
 			-- Enable Telescope extensions if they are installed
-			pcall(require("telescope").load_extension, "fzf")
-			pcall(require("telescope").load_extension, "ui-select")
+			pcall(telescope.load_extension, "fzf")
+			pcall(telescope.load_extension, "ui-select")
+			pcall(telescope.load_extension, "live_grep_args")
+
+			-- enter go to file in the current buffer
+			-- <C-x> go to file selection as a split
+			-- <C-v> go to file selection as a vsplit
+			-- <C-t> go to a file in a new tab
 
 			-- See `:help telescope.builtin`
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Search Files" })
 			vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "Search current Word" })
-			vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Search by Grep" })
+			-- vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Search by Grep" })
+			vim.keymap.set(
+				"n",
+				"<leader>fg",
+				'<cmd>lua require("telescope").extensions.live_grep_args.live_grep_args()<CR>',
+				{ desc = 'Search by Grep with optional args use `fun` or `"fun" -t md` to search only markdown files.' }
+			)
 			vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "Search Diagnostics" })
 
 			vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "Search Recent Open Files" })
@@ -747,66 +780,77 @@ require("lazy").setup({
 		},
 	},
 
-	-- session (aka opened buffers auto save and restore)
 	{
-		"nyngwang/suave.lua",
-		config = function()
-			require("suave").setup({
-				-- menu_height = 6,
-				auto_save = {
-					enabled = true,
-					-- exclude_filetypes = {},
-				},
-				store_hooks = {
-					-- WARN: DON'T call `vim.cmd('wa')` here. Use `setup.auto_save` instead. (See #4)
-					before_mksession = {
+		"rmagatti/auto-session",
+		lazy = false,
 
-						print("before session"),
-
-						-- function ()
-						--   -- `rcarriga/nvim-dap-ui`.
-						--   require('dapui').close()
-						-- end,
-						-- function ()
-						--   -- `nvim-neo-tree/neo-tree.nvim`.
-						--   for _, w in ipairs(vim.api.nvim_list_wins()) do
-						--     if vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(w), 'ft') == 'neo-tree' then
-						--       vim.api.nvim_win_close(w, false)
-						--     end
-						--   end
-						-- end,
-					},
-					after_mksession = {
-						-- NOTE: the `data` param is Lua table, which will be stored in json format under `.suave/` folder.
-						function(data)
-							print("after session")
-							-- store current colorscheme.
-							data.colorscheme = vim.g.colors_name
-						end,
-					},
-				},
-				restore_hooks = {
-					after_source = {
-						function(data)
-							print("after source hook")
-							if not data then
-								return
-							end
-							-- restore colorscheme.
-							vim.cmd(string.format(
-								[[
-              color %s
-              doau ColorScheme %s
-            ]],
-								data.colorscheme,
-								data.colorscheme
-							))
-						end,
-					},
-				},
-			})
-		end,
+		---enables autocomplete for opts
+		---@module "auto-session"
+		---@type AutoSession.Config
+		opts = {
+			suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+			-- log_level = 'debug',
+		},
 	},
+
+	-- session (aka opened buffers auto save and restore)
+	-- {
+	-- 	"nyngwang/suave.lua",
+	-- 	config = function()
+	-- 		require("suave").setup({
+	-- 			-- menu_height = 6,
+	-- 			auto_save = {
+	-- 				enabled = true,
+	-- 				-- exclude_filetypes = {},
+	-- 			},
+	-- 			store_hooks = {
+	-- 				-- DON'T call `vim.cmd('wa')` here. Use `setup.auto_save` instead. (See #4)
+	-- 				before_mksession = {
+	--
+	-- 					-- function ()
+	-- 					--   -- `rcarriga/nvim-dap-ui`.
+	-- 					--   require('dapui').close()
+	-- 					-- end,
+	-- 					-- function ()
+	-- 					--   -- `nvim-neo-tree/neo-tree.nvim`.
+	-- 					--   for _, w in ipairs(vim.api.nvim_list_wins()) do
+	-- 					--     if vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(w), 'ft') == 'neo-tree' then
+	-- 					--       vim.api.nvim_win_close(w, false)
+	-- 					--     end
+	-- 					--   end
+	-- 					-- end,
+	-- 				},
+	-- 				after_mksession = {
+	-- 					-- NOTE: the `data` param is Lua table, which will be stored in json format under `.suave/` folder.
+	-- 					function(data)
+	-- 						print("after session")
+	-- 						-- store current colorscheme.
+	-- 						data.colorscheme = vim.g.colors_name
+	-- 					end,
+	-- 				},
+	-- 			},
+	-- 			restore_hooks = {
+	-- 				after_source = {
+	-- 					function(data)
+	-- 						print("after source hook")
+	-- 						if not data then
+	-- 							return
+	-- 						end
+	-- 						-- restore colorscheme.
+	-- 						vim.cmd(string.format(
+	-- 							[[
+	--              color %s
+	--              doau ColorScheme %s
+	--            ]],
+	-- 							data.colorscheme,
+	-- 							data.colorscheme
+	-- 						))
+	-- 					end,
+	-- 				},
+	-- 			},
+	-- 		})
+	-- 	end,
+	-- },
 
 	{
 		"jiaoshijie/undotree",
