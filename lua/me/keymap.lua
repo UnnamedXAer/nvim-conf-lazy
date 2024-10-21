@@ -37,7 +37,7 @@ vim.keymap.set(
 
 -- other
 -- Diagnostic keymaps
--- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
 vim.keymap.set("n", "<leader>f", function()
 	vim.lsp.buf.format()
@@ -46,6 +46,7 @@ end)
 vim.keymap.set("n", "gh", function()
 	vim.lsp.buf.hover()
 end, { remap = false, desc = "Trigger hover popoup, use twice to focus that popup to be eable e.g. to scroll it." })
+
 vim.keymap.set("n", "<F2>", function()
 	vim.lsp.buf.rename()
 end, { remap = false })
@@ -54,3 +55,5 @@ end, { remap = false })
 -- vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 
 vim.api.nvim_set_keymap("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>", {})
+
+vim.keymap.set("n", "<leader>nm", "<cmd>messages<CR>", { desc = "Neovim | Messages", silent = true })
