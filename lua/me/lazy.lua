@@ -231,6 +231,7 @@ require("lazy").setup({
 	{
 		-- Main LSP Configuration
 		"neovim/nvim-lspconfig",
+		-- event = "VeryLazy",
 		dependencies = {
 			-- Automatically install LSPs and related tools to stdpath for Neovim
 			{ "williamboman/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
@@ -241,8 +242,31 @@ require("lazy").setup({
 			-- `opts = {}` is the same as calling `require('fidget').setup({})`
 			{ "j-hui/fidget.nvim", opts = {} },
 
+			{
+				"folke/lazydev.nvim",
+				ft = "lua", -- only load on lua files
+				opts = {
+					library = {
+						-- See the configuration section for more details
+						-- Load luvit types when the `vim.uv` word is found
+						{ path = "luvit-meta/library", words = { "vim%.uv" } },
+					},
+				},
+			},
+			{ "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+			{ -- optional completion source for require statements and module annotations
+				"hrsh7th/nvim-cmp",
+				opts = function(_, opts)
+					opts.sources = opts.sources or {}
+					table.insert(opts.sources, {
+						name = "lazydev",
+						group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+					})
+				end,
+			},
+
 			-- Allows extra capabilities provided by nvim-cmp
-			"hrsh7th/cmp-nvim-lsp",
+			-- "hrsh7th/cmp-nvim-lsp",
 		},
 		config = function()
 			--  This function gets run when an LSP attaches to a particular buffer.
@@ -363,7 +387,7 @@ require("lazy").setup({
 			local servers = {
 				-- clangd = {},
 				gopls = {},
-				-- pyright = {},
+				pyright = {},
 				-- rust_analyzer = {},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				--
@@ -403,7 +427,14 @@ require("lazy").setup({
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code
+				"black",
+				"debugpy",
+				"flake8",
+				"isort",
+				"mypy",
+				"pylint",
 			})
+
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
 			require("mason-lspconfig").setup({
@@ -486,7 +517,7 @@ require("lazy").setup({
 				--
 				-- You can use 'stop_after_first' to run the first available formatter from the list
 				javascript = { "prettierd", "prettier", stop_after_first = true },
-				["*"] = { "codespell" },
+				-- ["*"] = { "codespell" },
 			},
 		},
 	},
@@ -603,6 +634,7 @@ require("lazy").setup({
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
 					{ name = "path" },
+					-- { name = "buffer" }, -- text within current buffer
 				},
 			})
 		end,
@@ -738,7 +770,7 @@ require("lazy").setup({
 		--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 	},
 
-	-- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
+	-- The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
 	--    This is the easiest way to modularize your config.
 	--
 	--  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
@@ -826,7 +858,7 @@ require("lazy").setup({
 	-- 					-- end,
 	-- 				},
 	-- 				after_mksession = {
-	-- 					-- NOTE: the `data` param is Lua table, which will be stored in json format under `.suave/` folder.
+	-- 					-- the `data` param is Lua table, which will be stored in json format under `.suave/` folder.
 	-- 					function(data)
 	-- 						print("after session")
 	-- 						-- store current colorscheme.

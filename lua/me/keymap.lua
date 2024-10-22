@@ -54,6 +54,11 @@ end, { remap = false })
 -- append to all words that match word under curosor
 -- vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 
-vim.api.nvim_set_keymap("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>", {})
+vim.api.nvim_set_keymap(
+	"n",
+	"<leader>e",
+	"<cmd>lua vim.diagnostic.open_float()<CR>",
+	{ desc = "displays floating window (similar to hover) with errors, warning, etc." }
+)
 
 vim.keymap.set("n", "<leader>nm", "<cmd>messages<CR>", { desc = "Neovim | Messages", silent = true })
