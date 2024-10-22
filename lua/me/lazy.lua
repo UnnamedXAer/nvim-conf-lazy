@@ -451,6 +451,32 @@ require("lazy").setup({
 			})
 		end,
 	},
+	{
+		"mfussenegger/nvim-lint",
+		event = "BufWritePost",
+		config = function()
+			--Define a table of linters for each filetype (not extentions).
+			-- Additional linters can be found here: https://github.com/mfussenegger/nvim-lint?tab=readme-ov-file#available-linters
+
+			require("lint").linters_by_ft = {
+				python = {
+					-- 'flake8',
+					-- 'mypy',
+					"pylint",
+				},
+			}
+
+			-- Automatically run linters after saving. Use "InsertLeave" for more aggressive linting.
+
+			vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+				-- Only run liter for the following extensions. Remove this to always run.
+				pattern = { "*.py" },
+				callback = function()
+					require("lint").try_lint()
+				end,
+			})
+		end,
+	},
 
 	{ -- Autoformat
 		-- TODO: I need to have ability to format selection - not whole buffer;
@@ -513,7 +539,7 @@ require("lazy").setup({
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
-				-- python = { "isort", "black" },
+				python = { "black", "isort" },
 				--
 				-- You can use 'stop_after_first' to run the first available formatter from the list
 				javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -915,6 +941,93 @@ require("lazy").setup({
 			require("lualine").setup({
 				options = { theme = custom_gruvbox },
 			})
+		end,
+	},
+
+	{
+		"mfussenegger/nvim-dap",
+		config = function()
+			-- Debugging TODO: it was copy paste, verify if there is not duplicates ect.
+			vim.keymap.set("n", "<leader>bb", "<cmd>lua require'dap'.toggle_breakpoint()<cr>")
+			vim.keymap.set(
+				"n",
+				"<leader>bc",
+				"<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<cr>"
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>bl",
+				"<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<cr>"
+			)
+			vim.keymap.set("n", "<leader>br", "<cmd>lua require'dap'.clear_breakpoints()<cr>")
+			vim.keymap.set("n", "<leader>ba", "<cmd>Telescope dap list_breakpoints<cr>")
+			vim.keymap.set("n", "<leader>dc", "<cmd>lua require'dap'.continue()<cr>")
+			vim.keymap.set("n", "<leader>dj", "<cmd>lua require'dap'.step_over()<cr>")
+			vim.keymap.set("n", "<leader>dk", "<cmd>lua require'dap'.step_into()<cr>")
+			vim.keymap.set("n", "<leader>do", "<cmd>lua require'dap'.step_out()<cr>")
+			vim.keymap.set("n", "<leader>dd", function()
+				require("dap").disconnect()
+				require("dapui").close()
+			end)
+			vim.keymap.set("n", "<leader>dt", function()
+				require("dap").terminate()
+				require("dapui").close()
+			end)
+			vim.keymap.set("n", "<leader>dr", "<cmd>lua require'dap'.repl.toggle()<cr>")
+			vim.keymap.set("n", "<leader>dl", "<cmd>lua require'dap'.run_last()<cr>")
+			vim.keymap.set("n", "<leader>di", function()
+				require("dap.ui.widgets").hover()
+			end)
+			vim.keymap.set("n", "<leader>d?", function()
+				local widgets = require("dap.ui.widgets")
+				widgets.centered_float(widgets.scopes)
+			end)
+			vim.keymap.set("n", "<leader>df", "<cmd>Telescope dap frames<cr>")
+			vim.keymap.set("n", "<leader>dh", "<cmd>Telescope dap commands<cr>")
+			vim.keymap.set("n", "<leader>de", function()
+				require("telescope.builtin").diagnostics({ default_text = ":E:" })
+			end)
+		end,
+	},
+
+	-- python degugging
+	-- source: https://github.com/bcampolo/nvim-starter-kit/blob/python/.config/nvim/lua/plugins/nvim-dap-ui.lua
+	{
+		"mfussenegger/nvim-dap-python",
+		ft = "python",
+		dependencies = {
+			"mfussenegger/nvim-dap",
+		},
+		config = function()
+			-- require("dap-python").setup("/usr/bin/python")
+			require("dap-python").setup("/usr/bin/python3.10")
+			-- require("dap-python").setup("python")
+		end,
+	},
+
+	{
+		"rcarriga/nvim-dap-ui",
+		dependencies = {
+			"mfussenegger/nvim-dap",
+			"nvim-neotest/nvim-nio",
+		},
+
+		config = function(_, opts)
+			local dap = require("dap")
+			require("dapui").setup(opts)
+
+			dap.listeners.after.event_initialized["dapui_config"] = function()
+				require("dapui").open()
+			end
+
+			-- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
+
+			-- vim.keymap.set(
+			-- 	"n",
+			-- 	"<leader>dm",
+			-- 	'<Cmd>lua require("dapui").eval()<CR>',
+			-- 	{ desc = "dapui - eval expression under the curson" }
+			-- )
 		end,
 	},
 })
