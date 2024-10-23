@@ -760,6 +760,10 @@ require("lazy").setup({
 
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter-context",
+			"LiadOz/nvim-dap-repl-highlights",
+		},
 		build = ":TSUpdate",
 		main = "nvim-treesitter.configs", -- Sets main module to use for opts
 		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
@@ -794,6 +798,10 @@ require("lazy").setup({
 		--    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
 		--    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
 		--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+
+		config = function()
+			require("nvim-dap-repl-highlights").setup() -- probably must be setup before treesitter if i would like to add any config
+		end,
 	},
 
 	-- The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -855,65 +863,6 @@ require("lazy").setup({
 			-- log_level = 'debug',
 		},
 	},
-
-	-- session (aka opened buffers auto save and restore)
-	-- {
-	-- 	"nyngwang/suave.lua",
-	-- 	config = function()
-	-- 		require("suave").setup({
-	-- 			-- menu_height = 6,
-	-- 			auto_save = {
-	-- 				enabled = true,
-	-- 				-- exclude_filetypes = {},
-	-- 			},
-	-- 			store_hooks = {
-	-- 				-- DON'T call `vim.cmd('wa')` here. Use `setup.auto_save` instead. (See #4)
-	-- 				before_mksession = {
-	--
-	-- 					-- function ()
-	-- 					--   -- `rcarriga/nvim-dap-ui`.
-	-- 					--   require('dapui').close()
-	-- 					-- end,
-	-- 					-- function ()
-	-- 					--   -- `nvim-neo-tree/neo-tree.nvim`.
-	-- 					--   for _, w in ipairs(vim.api.nvim_list_wins()) do
-	-- 					--     if vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(w), 'ft') == 'neo-tree' then
-	-- 					--       vim.api.nvim_win_close(w, false)
-	-- 					--     end
-	-- 					--   end
-	-- 					-- end,
-	-- 				},
-	-- 				after_mksession = {
-	-- 					-- the `data` param is Lua table, which will be stored in json format under `.suave/` folder.
-	-- 					function(data)
-	-- 						print("after session")
-	-- 						-- store current colorscheme.
-	-- 						data.colorscheme = vim.g.colors_name
-	-- 					end,
-	-- 				},
-	-- 			},
-	-- 			restore_hooks = {
-	-- 				after_source = {
-	-- 					function(data)
-	-- 						print("after source hook")
-	-- 						if not data then
-	-- 							return
-	-- 						end
-	-- 						-- restore colorscheme.
-	-- 						vim.cmd(string.format(
-	-- 							[[
-	--              color %s
-	--              doau ColorScheme %s
-	--            ]],
-	-- 							data.colorscheme,
-	-- 							data.colorscheme
-	-- 						))
-	-- 					end,
-	-- 				},
-	-- 			},
-	-- 		})
-	-- 	end,
-	-- },
 
 	{
 		"jiaoshijie/undotree",
@@ -1004,17 +953,133 @@ require("lazy").setup({
 			-- require("dap-python").setup("python")
 		end,
 	},
+	-- Inline Debug Text
+	{
+		-- https://github.com/theHamsta/nvim-dap-virtual-text
+		"theHamsta/nvim-dap-virtual-text",
+		lazy = true,
+		opts = {
+			-- Display debug text as a comment
+			commented = true,
+			-- Customize virtual text
+			display_callback = function(variable, buf, stackframe, node, options)
+				if options.virt_text_pos == "inline" then
+					return " = " .. variable.value
+				else
+					return variable.name .. " = " .. variable.value
+				end
+			end,
+		},
+	},
 
 	{
 		"rcarriga/nvim-dap-ui",
 		dependencies = {
+			-- https://github.com/mfussenegger/nvim-dap
 			"mfussenegger/nvim-dap",
+			-- https://github.com/nvim-neotest/nvim-nio
 			"nvim-neotest/nvim-nio",
+			-- https://github.com/theHamsta/nvim-dap-virtual-text
+			"theHamsta/nvim-dap-virtual-text", -- inline variable text while debugging
+			-- https://github.com/nvim-telescope/telescope-dap.nvim
+			"nvim-telescope/telescope-dap.nvim", -- telescope integration with dap
+		},
+
+		opts = {
+			-- controls = {
+			-- 	element = "repl",
+			-- 	enabled = false,
+			-- 	icons = {
+			-- 		disconnect = "",
+			-- 		pause = "",
+			-- 		play = "",
+			-- 		run_last = "",
+			-- 		step_back = "",
+			-- 		step_into = "",
+			-- 		step_out = "",
+			-- 		step_over = "",
+			-- 		terminate = "",
+			-- 	},
+			-- },
+			element_mappings = {},
+			expand_lines = true,
+			floating = {
+				border = "single",
+				mappings = {
+					close = { "q", "<Esc>" },
+				},
+			},
+			force_buffers = true,
+			-- icons = {
+			-- 	collapsed = "",
+			-- 	current_frame = "",
+			-- 	expanded = "",
+			-- },
+			layouts = {
+				{
+					elements = {
+						{
+							id = "scopes",
+							size = 0.50,
+						},
+						{
+							id = "watches",
+							size = 0.10,
+						},
+						{
+							id = "stacks",
+							size = 0.30,
+						},
+						{
+							id = "breakpoints",
+							size = 0.10,
+						},
+					},
+					size = 40,
+					position = "left", -- Can be "left" or "right"
+				},
+				{
+					elements = {
+						"repl",
+						"console",
+					},
+					size = 10,
+					position = "bottom", -- Can be "bottom" or "top"
+				},
+			},
+			-- mappings = {
+			-- 	edit = "e",
+			-- 	expand = { "<CR>", "<2-LeftMouse>" },
+			-- 	open = "o",
+			-- 	remove = "d",
+			-- 	repl = "r",
+			-- 	toggle = "t",
+			-- },
+			render = {
+				indent = 1,
+				max_value_lines = 100,
+			},
 		},
 
 		config = function(_, opts)
 			local dap = require("dap")
+
 			require("dapui").setup(opts)
+
+			-- dap.configurations.python = {
+			-- 	{
+			-- 		type = "python",
+			-- 		request = "launch",
+			-- 		name = "Launch current pyton file (integratedTerminal)",
+			-- 		program = "${file}",
+			-- 		-- pythonPath = vim.fn.getcwd() .. "\\.venv\\Scripts\\python.exe",
+			-- 		console = "integratedTerminal",
+			-- 		-- console = "internalConsole",
+			-- 	},
+			-- }
+
+			-- dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
+			-- dap.defaults.fallback.terminal_win_cmd = "new"
 
 			dap.listeners.after.event_initialized["dapui_config"] = function()
 				require("dapui").open()
@@ -1029,6 +1094,34 @@ require("lazy").setup({
 				-- require("dapui").close()
 			end
 
+			dap.listeners.after.event_exited["dapui_config"] = function()
+				local buffer_name = vim.api.nvim_buf_get_name(0)
+				print(buffer_name) -- This will print the full path of the current buffer
+				if buffer_name:find("[dap-terminal]") then
+					print("stopping insert")
+					vim.cmd("stopinsert")
+				end
+			end
+
+			print("config of dap")
+
+			-- -- the following is supposed to delete buffer (dap-terminal) when it was "close - hidden"
+			-- -- it happen when we use :q on that buffer
+			-- vim.api.nvim_create_autocmd("BufHidden", {
+			-- 	pattern = "[dap-terminal]*",
+			-- 	callback = function(arg)
+			-- 		name = "<<none>>"
+			-- 		if arg.buf ~= nil then
+			-- 			name = arg.buf.name
+			-- 		end
+			--
+			-- 		print("-- deleting buffer" .. name)
+			-- 		vim.schedule(function()
+			-- 			vim.api.nvim_buf_delete(arg.buf, { force = true })
+			-- 		end)
+			-- 	end,
+			-- })
+
 			-- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
 
 			-- vim.keymap.set(
@@ -1039,6 +1132,29 @@ require("lazy").setup({
 			-- )
 		end,
 	},
+
+	{
+		"rcarriga/cmp-dap",
+		config = function()
+			require("cmp").setup({
+				enabled = function()
+					return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer()
+				end,
+			})
+
+			require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+				sources = {
+					{ name = "dap" },
+				},
+			})
+		end,
+	},
+	-- {
+	-- 	"LiadOz/nvim-dap-repl-highlights",
+	-- 	config = function()
+	-- require("nvim-dap-repl-highlights").setup()
+	-- 	end,
+	-- },
 })
 
 -- vim.cmd([[colorscheme everforest]])
