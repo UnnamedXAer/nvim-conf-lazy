@@ -1,7 +1,7 @@
 return { -- Highlight, edit, and navigate code
 	"nvim-treesitter/nvim-treesitter",
 	dependencies = {
-		"nvim-treesitter/nvim-treesitter-context",
+		-- "nvim-treesitter/nvim-treesitter-context", -- "sticky scroll" shows current context, i.e. keeps declaration of the funtion name at the top of the window
 		"LiadOz/nvim-dap-repl-highlights",
 	},
 	build = ":TSUpdate",
