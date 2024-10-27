@@ -1,6 +1,7 @@
 if 1 == 1 then
   return {}
 end
+print("dashboard-nvim  - should not be called")
 
 return {
 
