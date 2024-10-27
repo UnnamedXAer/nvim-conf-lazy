@@ -10,7 +10,7 @@ return {
     --Define a table of linters for each filetype (not extensions).
     -- Additional linters can be found here: https://github.com/mfussenegger/nvim-lint?tab=readme-ov-file#available-linters
 
-    print("nvim-lint -> config")
+    -- print("nvim-lint -> config")
 
     require("lint").linters_by_ft = {
       markdows = {
@@ -37,7 +37,7 @@ return {
 
         -- You can call `try_lint` with a linter name or a list of names to always
         -- run specific linters, independent of the `linters_by_ft` configuration
-        require("lint").try_lint("cspell")
+        -- require("lint").try_lint("cspell")
       end,
     })
   end,
