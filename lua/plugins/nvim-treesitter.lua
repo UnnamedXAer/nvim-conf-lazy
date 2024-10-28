@@ -1,7 +1,7 @@
 return { -- Highlight, edit, and navigate code
   "nvim-treesitter/nvim-treesitter",
   dependencies = {
-    -- "nvim-treesitter/nvim-treesitter-context", -- "sticky scroll" shows current context, i.e. keeps declaration of the funtion name at the top of the window
+    -- "nvim-treesitter/nvim-treesitter-context", -- "sticky scroll" shows current context, i.e. keeps declaration of the function name at the top of the window
     "LiadOz/nvim-dap-repl-highlights",
   },
   build = ":TSUpdate",
@@ -21,6 +21,10 @@ return { -- Highlight, edit, and navigate code
       "vim",
       "vimdoc",
       "python",
+      "javascript",
+      "typescript",
+      "json",
+      "yaml",
     },
     -- Autoinstall languages that are not installed
     auto_install = true,
