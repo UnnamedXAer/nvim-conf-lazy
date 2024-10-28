@@ -1,8 +1,3 @@
--- give those priority in the suggested word list
-vim.opt.sps = "file:~/.config/nvim/spell/sugg,best" -- TODO: does this even do anything??
-vim.opt.spelllang = "en_us"
-vim.opt.spell = true
-
 -- close popups like hover with q when focussed (2x gh)
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "dap-float",
@@ -39,3 +34,31 @@ vim.api.nvim_create_autocmd("BufEnter", {
 --     -- vim.opt_local.spell = true
 --   end,
 -- })
+
+local function printAvailableColorschemes()
+  local t = (vim.fn.getcompletion("", "color"))
+
+  s = ""
+
+  for k, v in pairs(t) do
+    s = s .. k .. ":" .. v .. "\n" -- concatenate key/value pairs, with a newline in-between
+  end
+
+  print(s)
+
+  local a = vim.ui.input({ prompt = "Pick number: " }, function(input)
+    print("\n the input is" .. input)
+    number = tonumber(input)
+    if number == nil then
+      vim.cmd.colorscheme(input)
+      print("\ntemporaryly colorscheme set to: " .. input)
+    else
+      print("\n the number is" .. number)
+      name = t[number]
+      vim.cmd.colorscheme(name)
+      print("\ntemporaryly colorscheme set to: " .. name)
+    end
+  end)
+end
+
+vim.api.nvim_create_user_command("Colorschemes", printAvailableColorschemes, {})

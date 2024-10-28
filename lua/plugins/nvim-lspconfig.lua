@@ -189,9 +189,10 @@ return {
       "flake8",
       "isort",
       "mypy",
+      "priettier",
       "pylint",
       -- "cpesll",
-      "codespell",
+      -- "codespell",
     })
 
     require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
