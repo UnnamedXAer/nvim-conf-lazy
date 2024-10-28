@@ -1,14 +1,19 @@
--- status line
-return
--- status line
-{
-	"nvim-lualine/lualine.nvim",
-	dependencies = { "nvim-tree/nvim-web-devicons" },
-	config = function()
-		local custom_gruvbox = require("lualine.themes.everforest")
-		custom_gruvbox.normal.c.bg = "#112233"
-		require("lualine").setup({
-			options = { theme = custom_gruvbox },
-		})
-	end,
+return {
+  -- status line
+  "nvim-lualine/lualine.nvim",
+  dependencies = { "nvim-tree/nvim-web-devicons" },
+  config = function()
+    local custom = require("lualine.themes.everforest")
+    -- options, see: https://github.com/nvim-lualine/lualine.nvim/wiki/Writing-a-theme#theme-example
+    custom.normal.c.bg = "#021426"
+    custom.insert.c.bg = "#021426"
+    custom.visual.c.bg = "#021426"
+    custom.replace.c.bg = "#021426"
+    custom.command.c.bg = "#021426"
+
+    custom.inactive.c.bg = "#112233"
+    require("lualine").setup({
+      options = { theme = custom },
+    })
+  end,
 }

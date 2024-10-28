@@ -1,10 +1,19 @@
-return { -- Autocompletion
+return {
+  -- Autocompletion
   "hrsh7th/nvim-cmp",
   event = "InsertEnter",
   dependencies = {
-    -- Snippet Engine & its associated nvim-cmp source
+
+    -- Adds other completion capabilities.
+    --  nvim-cmp does not ship with all sources by default. They are split
+    --  into multiple repos for maintenance purposes.
+    "hrsh7th/cmp-nvim-lsp",
+    "hrsh7th/cmp-path",
+    "hrsh7th/cmp-buffer",
+    "onsails/lspkind.nvim",
+
     {
-      "L3MON4D3/LuaSnip",
+      "L3MON4D3/LuaSnip", -- Snippet Engine & its associated nvim-cmp source
       build = (function()
         -- Build Step is needed for regex support in snippets.
         -- This step is not supported in many windows environments.
@@ -27,13 +36,8 @@ return { -- Autocompletion
       },
     },
     "saadparwaiz1/cmp_luasnip",
-
-    -- Adds other completion capabilities.
-    --  nvim-cmp does not ship with all sources by default. They are split
-    --  into multiple repos for maintenance purposes.
-    "hrsh7th/cmp-nvim-lsp",
-    "hrsh7th/cmp-path",
   },
+
   opts = function(_, opts)
     opts.sources = opts.sources or {}
     table.insert(opts.sources, {
@@ -41,18 +45,18 @@ return { -- Autocompletion
       group_index = 0, -- set group index to 0 to skip loading LuaLS completions
     })
   end,
+
   config = function()
     -- See `:help cmp`
+    local lspkind = require("lspkind")
+    lspkind.init({})
+
     local cmp = require("cmp")
     local luasnip = require("luasnip")
+
     luasnip.config.setup({})
 
     cmp.setup({
-      snippet = {
-        expand = function(args)
-          luasnip.lsp_expand(args.body)
-        end,
-      },
       completion = { completeopt = "menu,menuone,noinsert" },
 
       -- For an understanding of why these mappings were
@@ -75,17 +79,12 @@ return { -- Autocompletion
         --  This will expand snippets if the LSP sent a snippet.
         ["<C-y>"] = cmp.mapping.confirm({ select = true }),
 
-        -- If you prefer more traditional completion keymaps,
-        -- you can uncomment the following lines
-        -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        -- ['<Tab>'] = cmp.mapping.select_next_item(),
-        --['<S-Tab>'] = cmp.mapping.select_prev_item(),
-
         -- Manually trigger a completion from nvim-cmp.
         --  Generally you don't need this, because nvim-cmp will display
         --  completions whenever it has completion options available.
         ["<C-Space>"] = cmp.mapping.complete({}),
 
+        -- For when snippet is inserted:
         -- Think of <c-l> as moving to the right of your snippet expansion.
         --  So if you have a snippet that's like:
         --  function $name($args)
@@ -116,9 +115,13 @@ return { -- Autocompletion
           group_index = 0,
         },
         { name = "nvim_lsp" },
-        { name = "luasnip" },
         { name = "path" },
-        -- { name = "buffer" }, -- text within current buffer
+        { name = "buffer" }, -- text within current buffer
+      },
+      snippet = {
+        expand = function(args)
+          luasnip.lsp_expand(args.body)
+        end,
       },
     })
   end,

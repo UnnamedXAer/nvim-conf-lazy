@@ -38,23 +38,17 @@ vim.api.nvim_create_autocmd("BufEnter", {
 local function printAvailableColorschemes()
   local t = (vim.fn.getcompletion("", "color"))
 
-  s = ""
-
-  for k, v in pairs(t) do
-    s = s .. k .. ":" .. v .. "\n" -- concatenate key/value pairs, with a newline in-between
-  end
-
-  print(s)
+  require("common").printTable(t)
 
   local a = vim.ui.input({ prompt = "Pick number: " }, function(input)
     print("\n the input is" .. input)
-    number = tonumber(input)
+    local number = tonumber(input)
     if number == nil then
       vim.cmd.colorscheme(input)
       print("\ntemporaryly colorscheme set to: " .. input)
     else
       print("\n the number is" .. number)
-      name = t[number]
+      local name = t[number]
       vim.cmd.colorscheme(name)
       print("\ntemporaryly colorscheme set to: " .. name)
     end

@@ -1,3 +1,5 @@
+use `:checkhealth` to see what's missing
+
 Windows needs: 
 - `choco install mingw` (gcc or something for mason?)
 - `choco install fd ripgrep` (for telescope stuff)
