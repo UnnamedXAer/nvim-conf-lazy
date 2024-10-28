@@ -21,18 +21,24 @@ vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right win
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
+-- resize windows
+vim.keymap.set("n", "<M-,>", "<c-w>5<")
+vim.keymap.set("n", "<M-.>", "<c-w>5>")
+vim.keymap.set("n", "<M-t>", "<c-w>+")
+vim.keymap.set("n", "<M-s>", "<c-w>-")
+
 -- better go down (does not skip wrapped part of a line)
 vim.keymap.set(
-	{ "n", "v" },
-	"j",
-	"v:count == 0 ? 'gj' : 'j'",
-	{ desc = "General | Better down", expr = true, silent = true }
+  { "n", "v" },
+  "j",
+  "v:count == 0 ? 'gj' : 'j'",
+  { desc = "General | Better down", expr = true, silent = true }
 )
 vim.keymap.set(
-	{ "n", "v" },
-	"k",
-	"v:count == 0 ? 'gk' : 'k'",
-	{ desc = "General | Better up", expr = true, silent = true }
+  { "n", "v" },
+  "k",
+  "v:count == 0 ? 'gk' : 'k'",
+  { desc = "General | Better up", expr = true, silent = true }
 )
 
 -- other
@@ -40,25 +46,25 @@ vim.keymap.set(
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
 vim.keymap.set("n", "<leader>f", function()
-	vim.lsp.buf.format()
+  vim.lsp.buf.format()
 end)
 
 vim.keymap.set("n", "gh", function()
-	vim.lsp.buf.hover()
+  vim.lsp.buf.hover()
 end, { remap = false, desc = "Trigger hover popoup, use twice to focus that popup to be eable e.g. to scroll it." })
 
 vim.keymap.set("n", "<F2>", function()
-	vim.lsp.buf.rename()
+  vim.lsp.buf.rename()
 end, { remap = false })
 
 -- append to all words that match word under curosor
 -- vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 
 vim.api.nvim_set_keymap(
-	"n",
-	"<leader>e",
-	"<cmd>lua vim.diagnostic.open_float()<CR>",
-	{ desc = "displays floating window (similar to hover) with errors, warning, etc." }
+  "n",
+  "<leader>e",
+  "<cmd>lua vim.diagnostic.open_float()<CR>",
+  { desc = "displays floating window (similar to hover) with errors, warning, etc." }
 )
 
 vim.keymap.set("n", "<leader>nm", "<cmd>messages<CR>", { desc = "Neovim | Messages", silent = true })

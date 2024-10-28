@@ -32,9 +32,11 @@ end
 vim.opt.undofile = true
 
 vim.opt.hlsearch = false
-vim.opt.incsearch = true -- show serach results while typing
+vim.opt.incsearch = true -- show search results while typing
 
-vim.opt.ignorecase = true -- search ingore casing etirely
+vim.opt.inccommand = "split" -- show command (eg replace :s/...) results on fly
+
+vim.opt.ignorecase = true -- search ignore casing entirely
 --vim.opt.smartcase = true -- search when at least one upper case then search is case sensitive
 
 vim.opt.termguicolors = true -- enable gui colors
