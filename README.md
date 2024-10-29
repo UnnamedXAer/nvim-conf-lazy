@@ -12,7 +12,7 @@ wsl:
 `sudo apt install ripgrep`
 
 - allows to open links in windows from wsl within neovim with `gx`
-npm i -g wsl-open
+`npm i -g wsl-open`
 
 # some useful links:
 - installing python:

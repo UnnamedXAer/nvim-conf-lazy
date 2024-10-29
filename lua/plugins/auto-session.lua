@@ -1,3 +1,6 @@
+-- look at this:
+-- https://github.com/josean-dev/dev-environment-files/blob/main/.config/nvim/lua/josean/plugins/auto-session.lua
+
 return {
   "rmagatti/auto-session",
   enabled = false,

@@ -2,6 +2,7 @@ return {
   "zbirenbaum/neodim",
   event = "LspAttach",
   config = function()
+    print("neodimming...")
     require("neodim").setup({
       alpha = 0.75,
       blend_color = "#000000",
@@ -15,8 +16,8 @@ return {
         "[nN]ever [rR]ead",
         "[nN]ot [rR]ead",
       },
-      -- priority = 128,
-      priority = 228,
+      priority = 128,
+      -- priority = 228,
       disable = {},
     })
   end,
