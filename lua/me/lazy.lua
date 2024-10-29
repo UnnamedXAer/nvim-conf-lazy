@@ -29,7 +29,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure and install plugins ]]
 --
--- To ckeck the current status of you plugins run:
+-- To check the current status of you plugins run:
 --    :Lazy
 --
 -- You can press `?` in this menu for help. Use `:q` to close the window
