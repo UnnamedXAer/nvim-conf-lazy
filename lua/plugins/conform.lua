@@ -10,7 +10,7 @@ return {
     {
       "<leader>f",
       function()
-        print("manual format triggered")
+        -- print("manual format triggered")
         require("conform").format({
           async = true,
           lsp_format = "fallback",
@@ -28,7 +28,7 @@ return {
     },
   },
   config = function()
-    print("conform config")
+    -- print("conform config")
 
     require("conform").setup({
 
@@ -54,7 +54,7 @@ return {
         ["*"] = { "codespell" },
       },
       format_on_save = function(bufnr)
-        print("format on save: start")
+        -- print("format on save: start")
 
         local disable_filetypes = {
           js = true,
@@ -80,6 +80,6 @@ return {
       end,
     })
 
-    print("conform config: end")
+    -- print("conform config: end")
   end,
 }

@@ -50,19 +50,40 @@ return {
   --     require("bamboo").load() -- enable theme
   --   end,
   -- },
-  {
-    "neanias/everforest-nvim",
-    version = false,
-    lazy = false,
-    priority = 1000, -- make sure to load this before all the other start plugins
-    -- Optional; default configuration will be used if setup isn't called.
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require("everforest").setup({
-        background = "medium",
-      })
 
-      vim.cmd.colorscheme("everforest")
+  -- EVERFOREST
+
+  -- {
+  --   "neanias/everforest-nvim",
+  --   version = false,
+  --   lazy = false,
+  --   priority = 1000, -- make sure to load this before all the other start plugins
+  --   -- Optional; default configuration will be used if setup isn't called.
+  --   config = function()
+  --     ---@diagnostic disable-next-line: missing-fields
+  --     require("everforest").setup({
+  --       background = "medium",
+  --     })
+  --
+  --     vim.cmd.colorscheme("everforest")
+  --   end,
+  -- },
+
+  {
+    "sainnhe/gruvbox-material",
+    config = function()
+      vim.cmd.colorscheme("gruvbox-material")
     end,
   },
+
+  -- CATPPUCCIN
+
+  -- {
+  --   "catppuccin/nvim",
+  --   name = "catppuccin",
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme("catppuccin")
+  --   end,
+  -- },
 }
