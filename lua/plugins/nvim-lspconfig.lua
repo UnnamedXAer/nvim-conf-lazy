@@ -4,7 +4,9 @@ return {
   event = "VeryLazy",
   dependencies = {
     -- Automatically install LSPs and related tools to stdpath for Neovim
-    { "williamboman/mason.nvim", config = true }, -- Must be loaded before dependants
+    -- { "williamboman/mason.nvim", config = true }, -- Must be loaded before dependants
+
+    "williamboman/mason.nvim", -- Must be loaded before dependants
     "williamboman/mason-lspconfig.nvim",
     "WhoIsSethDaniel/mason-tool-installer.nvim",
 
@@ -38,11 +40,6 @@ return {
     vim.api.nvim_create_autocmd("LspAttach", {
       group = vim.api.nvim_create_augroup("custom-fn-lsp-attach", { clear = true }),
       callback = function(event)
-        -- Remember that Lua is a real programming language, and as such it is possible
-        -- to define small helper and utility functions so you don't have to repeat yourself.
-        --
-        -- In this case, we create a function that lets us more easily define mappings specific
-        -- for LSP related items. It sets the mode, buffer and description for us each time.
         local map = function(keys, func, desc, mode)
           mode = mode or "n"
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
@@ -125,7 +122,5 @@ return {
         end
       end,
     }) -- lsp attach : end
-
-    require("custom.lsp_format_lint")
   end,
 }

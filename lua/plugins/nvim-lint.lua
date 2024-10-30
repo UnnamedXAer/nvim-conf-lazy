@@ -1,19 +1,8 @@
--- General purpose linters
-
--- https://github.com/mfussenegger/nvim-lint
-
 return {
   "mfussenegger/nvim-lint",
-  -- event = "BufWritePost",
-  -- event = "BufReadPost",
-  event = { "BufReadPre", "BufNewFile" },
+  event = { "BufReadPost", "BufNewFile" },
   -- event = {  },
   config = function()
-    --Define a table of linters for each filetype (not extensions).
-    -- Additional linters can be found here: https://github.com/mfussenegger/nvim-lint?tab=readme-ov-file#available-linters
-
-    -- print("nvim-lint -> config")
-
     local lint = require("lint")
 
     lint.linters_by_ft = {
@@ -24,6 +13,7 @@ return {
         -- 'flake8',
         -- 'mypy',
         "pylint",
+        -- "ruff",
       },
       javascript = { "eslint_d" },
       typescript = { "eslint_d" },
@@ -31,17 +21,18 @@ return {
       typescriptreact = { "eslint_d" },
       svelte = { "eslint_d" },
     }
-    --
-    -- lint.linters.eslint_d.args = {
-    --   "--no-warn-ignored", -- <-- this is the key argument
-    --   "--format",
-    --   "json",
-    --   "--stdin",
-    --   "--stdin-filename",
-    --   function()
-    --     return vim.api.nvim_buf_get_name(0)
-    --   end,
+
+    lint.linters.pylint.args = vim.list_extend(lint.linters.pylint.args, {
+      "--disable=C0114,C0115,C0116",
+    })
+
+    -- lint.linters.pylint.args = {
+    --   -- "--max-line-length=20",
+    --   -- "--disable=C0114",
+    --   -- "--disable=C0111",
     -- }
+
+    -- "--disable", "C0114,C0115,C0116" ,
 
     local lint_autogroup = vim.api.nvim_create_augroup("lint", { clear = true })
 
@@ -73,16 +64,13 @@ return {
         -- You can call `try_lint` with a linter name or a list of names to always
         -- run specific linters, independent of the `linters_by_ft` configuration
         -- require("lint").try_lint("cspell")
-        require("lint").try_lint("codespell", { ignore_errors = false })
+        -- require("lint").try_lint("codespell", { ignore_errors = false }) -- this fucks with "trouble.nvim"
         -- print("codespell done")
       end,
     })
 
-    print("setting keymap for linter")
     vim.keymap.set("n", "<leader>l", function()
-      print("about to lint...")
       lint.try_lint()
-      print("lint end")
     end, { desc = "Linter | trigger linting for the current file" })
   end,
 }
