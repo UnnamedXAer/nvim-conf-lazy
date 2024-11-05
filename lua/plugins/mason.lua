@@ -16,17 +16,6 @@ return {
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
-    local is_rpi = false
-
-    local handle, err1 = assert(io.popen("uname -a"))
-    if handle and not err1 then
-      local result = handle:read("*a")
-      handle:close()
-      is_rpi = string.find(result, "unnamedpi") ~= nil
-      print("uname -a: " .. result)
-      print("is_rpi: " .. tostring(is_rpi))
-    end
-
     -- Enable the following language servers
     --
     --  Add any additional override configuration in the following tables. Available keys are:
@@ -88,6 +77,8 @@ return {
       "codespell",
     })
 
+    local os_name = require("common").get_os_full_name()
+    local is_rpi = string.find(os_name, "unnamedpi") ~= nil
     if is_rpi then
       ensure_installed = {}
     end
@@ -99,7 +90,7 @@ return {
       pattern = "MasonToolsStartingInstall",
       callback = function()
         vim.schedule(function()
-          print("➡️l mason-tool-installer is starting")
+          -- print("➡️l mason-tool-installer is starting")
           -- print(vim.inspect(e.data))
         end)
       end,
@@ -112,10 +103,10 @@ return {
           return
         end
 
-        vim.schedule(function()
-          print("🆗 all installed:")
-          print(data_str) -- print the table that lists the programs that were installed
-        end)
+        -- vim.schedule(function()
+        --   print("🆗 all installed:")
+        --   print(data_str) -- print the table that lists the programs that were installed
+        -- end)
       end,
     })
 
