@@ -47,7 +47,7 @@ M.get_os_full_name = function()
     M._os_full_name = exec_get_os_name()
   end
 
-  print("os: " .. M._os_full_name)
+  -- print("os: " .. M._os_full_name)
 
   return M._os_full_name
 end

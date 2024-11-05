@@ -89,19 +89,19 @@ return {
     vim.api.nvim_create_autocmd("User", {
       pattern = "MasonToolsStartingInstall",
       callback = function()
-        vim.schedule(function()
-          -- print("➡️l mason-tool-installer is starting")
-          -- print(vim.inspect(e.data))
-        end)
+        -- vim.schedule(function()
+        -- print("➡️l mason-tool-installer is starting")
+        -- print(vim.inspect(e.data))
+        -- end)
       end,
     })
     vim.api.nvim_create_autocmd("User", {
       pattern = "MasonToolsUpdateCompleted",
       callback = function(e)
-        local data_str = vim.inspect(e.data)
-        if data_str == "{}" then
-          return
-        end
+        -- local data_str = vim.inspect(e.data)
+        -- if data_str == "{}" then
+        --   return
+        -- end
 
         -- vim.schedule(function()
         --   print("🆗 all installed:")
