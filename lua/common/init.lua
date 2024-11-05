@@ -23,22 +23,22 @@ M.get_os_full_name = function()
       local handle, err = assert(io.popen("uname -a"))
       if err then
         print("os_full_name: err: " .. tostring(err))
-        return ""
+        return "err: " .. tostring(err)
       end
 
       if not handle then
         print("os_full_name: no handle")
-        return ""
+        return "no_handle"
       end
 
       local result = handle:read("*a")
       handle:close()
-      if not result then
-        if jit then
+      if not result or string.len(result) == 0 then
+        if jit and jit.os then
           return jit.os
         end
 
-        return "Windows:maybe" -- probably windows, because id doesn't have "uname" command
+        return "Windows:maybe" -- probably windows, because the "uname" command does not yield anything useful
       end
 
       return result
