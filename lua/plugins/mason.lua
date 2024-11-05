@@ -16,6 +16,17 @@ return {
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
+    local is_rpi = false
+
+    local handle, err1 = assert(io.popen("uname -a"))
+    if handle and not err1 then
+      local result = handle:read("*a")
+      handle:close()
+      is_rpi = string.find(result, "unnamedpi") ~= nil
+      print("uname -a: " .. result)
+      print("is_rpi: " .. tostring(is_rpi))
+    end
+
     -- Enable the following language servers
     --
     --  Add any additional override configuration in the following tables. Available keys are:
@@ -76,6 +87,10 @@ return {
       -- "cpesll",
       "codespell",
     })
+
+    if is_rpi then
+      ensure_installed = {}
+    end
 
     -- print("all to install:   ---------------------------")
     -- require("common").printTable(ensure_installed)
