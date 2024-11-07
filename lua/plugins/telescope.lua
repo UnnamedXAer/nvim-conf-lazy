@@ -65,6 +65,10 @@ return { -- Fuzzy Finder (files, lsp, etc)
       --  All the info you're looking for is in `:help telescope.setup()`
       --
       defaults = {
+        file_ignore_patterns = {
+          ".git",
+          -- "**/.git/*",
+        },
         -- hidden = true - is not supported in text grep commands
         vimgrep_arguments = vimGrepArguments,
         mappings = {
