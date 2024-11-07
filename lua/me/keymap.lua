@@ -6,6 +6,13 @@ vim.keymap.set("i", "<C-c>", "<Esc>") -- makes Esc exactly the same as Ctrl-c
 
 vim.keymap.set("i", "jk", "<Esc>") -- quick Esc when typing
 
+vim.keymap.set(
+  { "v", "n" },
+  "<leader>Q",
+  ":bp|:bd#<CR>",
+  { desc = "General | Quit visible buffer on go back to the previous buffer" }
+) -- quit visible buffer: (go back to prev buffer and quit the one that was visible)
+
 -- copy/paste
 vim.keymap.set({ "n", "v" }, "<leader>v", '"+p')
 vim.keymap.set("v", "<leader>c", '"+y')
@@ -51,7 +58,7 @@ end)
 
 vim.keymap.set("n", "gh", function()
   vim.lsp.buf.hover()
-end, { remap = false, desc = "Trigger hover popoup, use twice to focus that popup to be eable e.g. to scroll it." })
+end, { remap = false, desc = "Trigger hover popup, use twice to focus that popup to be eable e.g. to scroll it." })
 
 vim.keymap.set("n", "<F2>", function()
   vim.lsp.buf.rename()
