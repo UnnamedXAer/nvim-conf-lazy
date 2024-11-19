@@ -6,25 +6,55 @@ return {
   },
   config = function()
     local pythonPath = "python3"
+
+    require("dap-python").setup(pythonPath)
+
     local dap = require("dap")
-    dap.configurations.python = {
+
+    -- to debug with 'venv' activated you need to install debugpy for that venv.
+    -- pythonPath + ` -m debugpy --version` must work in the shell
+    -- e.q. `python3 -m debugpy --version`
+
+    -- https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
+    local configurations_python = {
       {
         type = "python",
         request = "launch",
-        name = "My: Launch file",
+        name = "venv: Launch file",
         program = "${file}",
         pythonPath = function()
           -- return "/usr/bin/python"
-          return pythonPath
+          return "venv/bin/python3"
+        end,
+      },
+
+      {
+        type = "python",
+        request = "launch",
+        name = "venv: Launch main.py",
+        program = "./main.py",
+        pythonPath = function()
+          -- return "/usr/bin/python"
+          return "venv/bin/python3"
         end,
       },
     }
+
+    for _, config in ipairs(configurations_python) do
+      table.insert(dap.configurations.python, config)
+    end
+
+    -- dap.configurations.python = configurations_python
+
+    -- print("dap python configs:")
+    -- for k, v in dap.configurations.python do
+    --   print("k: " .. k .. ";\tv: " .. tostring(v))
+    -- end
 
     -- require("dap-python").setup("/usr/bin/python")
     -- require("dap-python").setup("python3")
     -- require("dap-python").setup("/usr/bin/python3.10")
     -- require("dap-python").setup("/usr/bin/python3.13")
     -- require("dap-python").setup("/usr/bin/python3.12")
-    require("dap-python").setup(pythonPath)
   end,
 }
