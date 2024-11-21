@@ -23,7 +23,7 @@ return {
     }
 
     lint.linters.pylint.args = vim.list_extend(lint.linters.pylint.args, {
-      "--disable=C0114,C0115,C0116",
+      "--disable=C0114,C0115,C0116,C0103",
       "--disable=too-few-pulic-methods",
     })
 
