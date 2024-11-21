@@ -9,6 +9,10 @@ return {
 
     require("dap-python").setup(pythonPath)
 
+    vim.keymap.set("n", "<leader>ds", "<cmd>lua require'dap-python'.debug_selection()<cr>")
+    vim.keymap.set("n", "<leader>du", "<cmd>lua require'dap-python'.test_method()<cr>")
+    vim.keymap.set("n", "<leader>dU", "<cmd>lua require'dap-python'.test_class()<cr>")
+
     local dap = require("dap")
 
     -- to debug with 'venv' activated you need to install debugpy for that venv.

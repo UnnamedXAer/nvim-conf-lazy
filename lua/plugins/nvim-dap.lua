@@ -2,7 +2,7 @@
 return {
   "mfussenegger/nvim-dap",
   config = function()
-    -- Debugging TODO: it was copy paste, verify if there is not duplicates ect.
+    -- Debugging TODO: it was copy paste, verify if there is not duplicates etc.
     vim.keymap.set("n", "<leader>bb", "<cmd>lua require'dap'.toggle_breakpoint()<cr>")
     vim.keymap.set(
       "n",
@@ -41,17 +41,22 @@ return {
     vim.keymap.set("n", "<leader>dl", "<cmd>lua require'dap'.run_last()<cr>")
     vim.keymap.set("n", "<leader>di", function()
       require("dap.ui.widgets").hover()
-    end)
+    end, { desc = "dap | hover with current value" })
     vim.keymap.set("n", "<leader>d?", function()
       local widgets = require("dap.ui.widgets")
       widgets.centered_float(widgets.scopes)
-    end)
+    end, { desc = "dap | show dialog with variables" })
     vim.keymap.set("n", "<leader>dp", "<cmd>lua require'dap'.pause()<cr>", { desc = "dap | pause" })
-    vim.keymap.set("n", "<leader>df", "<cmd>Telescope dap frames<cr>")
-    vim.keymap.set("n", "<leader>dh", "<cmd>Telescope dap commands<cr>")
+    vim.keymap.set(
+      "n",
+      "<leader>df",
+      "<cmd>Telescope dap frames<cr>",
+      { desc = "dap | dialog with frames aka call stack" }
+    )
+    vim.keymap.set("n", "<leader>dh", "<cmd>Telescope dap commands<cr>", { desc = "dap | show dap commands" })
     vim.keymap.set("n", "<leader>de", function()
       require("telescope.builtin").diagnostics({ default_text = ":E:" })
-    end)
+    end, { desc = "show diagnostics in telescopte" })
 
     vim.keymap.set(
       "n",
