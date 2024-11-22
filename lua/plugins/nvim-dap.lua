@@ -7,7 +7,7 @@ return {
     vim.keymap.set(
       "n",
       "<leader>bB",
-      "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: ')<cr>",
+      "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<cr>",
       { desc = "dap | set conditional breakpoint" }
     )
     vim.keymap.set(
