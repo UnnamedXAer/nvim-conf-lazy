@@ -1,3 +1,21 @@
+local function save_before_action(cb)
+  return function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local modified = vim.api.nvim_buf_get_option(bufnr, "modified")
+    print("modified: " .. tostring(modified))
+    if modified then
+      print("‼️modified")
+    end
+
+    local modified2 = vim.bo[bufnr].modified
+    if modified ~= modified2 then
+      print("get opt modified: " .. tostring(modified) .. ", vim.bo[bn].modified: " .. tostring(modified2))
+    end
+
+    cb()
+  end
+end
+
 return {
   "mfussenegger/nvim-dap-python",
   ft = "python",
@@ -9,9 +27,12 @@ return {
 
     require("dap-python").setup(pythonPath)
 
+    vim.keymap.set("n", "<leader>du", save_before_action(require("dap-python").test_method))
+    vim.keymap.set("n", "<leader>dU", save_before_action(require("dap-python").test_class))
+
     vim.keymap.set("n", "<leader>ds", "<cmd>lua require'dap-python'.debug_selection()<cr>")
-    vim.keymap.set("n", "<leader>du", "<cmd>lua require'dap-python'.test_method()<cr>")
-    vim.keymap.set("n", "<leader>dU", "<cmd>lua require'dap-python'.test_class()<cr>")
+    -- vim.keymap.set("n", "<leader>du", "<cmd>lua require'dap-python'.test_method()<cr>")
+    -- vim.keymap.set("n", "<leader>dU", "<cmd>lua require'dap-python'.test_class()<cr>")
 
     local dap = require("dap")
 

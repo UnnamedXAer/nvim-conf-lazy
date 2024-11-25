@@ -23,7 +23,17 @@ return {
     vim.keymap.set("n", "<leader>br", "<cmd>lua require'dap'.clear_breakpoints()<cr>")
     vim.keymap.set("n", "<leader>ba", "<cmd>Telescope dap list_breakpoints<cr>")
 
-    vim.keymap.set("n", "<leader>dc", "<cmd>lua require'dap'.continue()<cr>")
+    vim.keymap.set("n", "<leader>dc", function()
+      local buf = vim.api.nvim_get_current_buf()
+      local modified = vim.api.nvim_buf_get_option(buf, "modified")
+      print("modified: " .. tostring(modified))
+      if modified then
+        print("‼️modified")
+      end
+
+      require("dap").continue()
+    end)
+
     vim.keymap.set("n", "<leader>dj", "<cmd>lua require'dap'.step_over()<cr>")
     vim.keymap.set("n", "<leader>dk", "<cmd>lua require'dap'.step_into()<cr>")
     vim.keymap.set("n", "<leader>do", "<cmd>lua require'dap'.step_out()<cr>")
