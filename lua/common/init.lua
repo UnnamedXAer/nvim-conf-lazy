@@ -52,4 +52,23 @@ M.get_os_full_name = function()
   return M._os_full_name
 end
 
+---@param cb fun()
+M.save_before_action = function(cb)
+  return function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local modified = vim.api.nvim_buf_get_option(bufnr, "modified")
+    -- print("modified: " .. tostring(modified))
+    if modified then
+      print("‼️modified")
+    end
+
+    local modified2 = vim.bo[bufnr].modified
+    if modified ~= modified2 then
+      print("get opt modified: " .. tostring(modified) .. ", vim.bo[bn].modified: " .. tostring(modified2))
+    end
+
+    cb()
+  end
+end
+
 return M
