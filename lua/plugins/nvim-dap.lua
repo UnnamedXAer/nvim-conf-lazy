@@ -32,7 +32,7 @@ return {
 
     vim.keymap.set("n", "<leader>dd", function()
       require("dap").disconnect()
-      require("dapui").close()
+      -- require("dapui").close()
     end)
     vim.keymap.set("n", "<leader>dt", function()
       require("dap").terminate()
