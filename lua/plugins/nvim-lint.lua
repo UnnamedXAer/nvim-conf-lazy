@@ -23,17 +23,10 @@ return {
     }
 
     lint.linters.pylint.args = vim.list_extend(lint.linters.pylint.args, {
-      "--disable=C0114,C0115,C0116,C0103,C0413",
+      "--disable=C0114,C0115,C0116,C0103,C0413,C0209",
       "--disable=too-few-pulic-methods",
     })
-
-    -- lint.linters.pylint.args = {
-    --   -- "--max-line-length=20",
-    --   -- "--disable=C0114",
-    --   -- "--disable=C0111",
-    -- }
-
-    -- "--disable", "C0114,C0115,C0116" ,
+    -- C0209 - consider-using-f-string
 
     local lint_autogroup = vim.api.nvim_create_augroup("lint", { clear = true })
 
