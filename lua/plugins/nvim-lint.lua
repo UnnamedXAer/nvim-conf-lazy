@@ -23,9 +23,9 @@ return {
     }
 
     lint.linters.pylint.args = vim.list_extend(lint.linters.pylint.args, {
-      "--disable=C0114,C0115,C0116,C0103,C0413,C0209",
-      "--disable=too-few-pulic-methods",
+      "--disable=C0114,C0115,C0116,C0103,C0413,C0209,R0903",
     })
+    -- R0903 - too-few-pulic-methods
     -- C0209 - consider-using-f-string
 
     local lint_autogroup = vim.api.nvim_create_augroup("lint", { clear = true })
