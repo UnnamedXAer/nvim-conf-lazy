@@ -1,5 +1,18 @@
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
+
+-- unset F1
+vim.keymap.set({
+  "n", -- Normal mode
+  "i", -- Insert mode
+  "v", -- Visual mode
+  "x", -- Visual Block mode
+  "o", -- Operator-pending mode
+  "s", -- Select mode
+  "c", -- Command-line mode
+  "t", -- Terminal mode
+}, "<F1>", "<nop>", { noremap = false })
+
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 vim.keymap.set("i", "<C-c>", "<Esc>") -- makes Esc exactly the same as Ctrl-c

@@ -23,8 +23,9 @@ return {
     }
 
     lint.linters.pylint.args = vim.list_extend(lint.linters.pylint.args, {
-      "--disable=C0114,C0115,C0116,C0103,C0413,C0209,R0903,C0415",
+      "--disable=C0114,C0115,C0116,C0103,C0413,C0209,R0903,C0415,W0621",
     })
+    -- W0621 - redefined-outer-name
     -- R0903 - too-few-pulic-methods
     -- C0209 - consider-using-f-string
     -- C0415 - import-outside-toplevel
