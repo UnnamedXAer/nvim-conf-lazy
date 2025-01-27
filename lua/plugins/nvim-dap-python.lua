@@ -44,6 +44,17 @@ return {
           return "venv/bin/python3"
         end,
       },
+
+      {
+        type = "python",
+        request = "launch",
+        name = "Launch file with default python",
+        program = "{file}",
+        pythonPath = function()
+          -- return "/usr/bin/python"
+          return "python"
+        end,
+      },
     }
 
     for _, config in ipairs(configurations_python) do
