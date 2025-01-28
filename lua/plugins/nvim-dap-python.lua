@@ -6,6 +6,7 @@ return {
   },
   config = function()
     local pythonPath = "python3"
+    -- local pythonPath = "venv/bin/python3"
 
     require("dap-python").setup(pythonPath)
 
