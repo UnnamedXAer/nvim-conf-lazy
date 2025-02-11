@@ -109,6 +109,51 @@ return {
 
     require("dapui").setup(opts)
 
+    local configure_c_debugger = function(dap)
+      -- would be nice to find better place for this
+
+      local mason_registry = require("mason-registry")
+      local codelldb_root = mason_registry.get_package("codelldb"):get_install_path() .. "/extension/"
+      local codelldb_path = codelldb_root .. "adapter/codelldb"
+      local liblldb_path = codelldb_root .. "lldb/lib/liblldb.so"
+      dap.adapters.codelldb = {
+        type = "server",
+        port = "${port}",
+        host = "127.0.0.1",
+        executable = {
+          command = codelldb_path,
+          args = { "--liblldb", liblldb_path, "--port", "${port}" },
+        },
+      }
+
+      dap.configurations.c = {
+        {
+          name = "c_launch",
+          type = "codelldb",
+          request = "launch",
+          -- program = function()
+          --   -- return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/target/debug/", "file")
+          --   return vim.fn.input("Path to executable> ", vim.fn.getcwd() .. "/", "file")
+          -- end,
+
+          program = function()
+            -- local path = "${fileDirname}/${fileBasenameNoExtension}"
+            local path = vim.fn.getcwd() .. "/revers_binary_num"
+            print("launching: '" .. path .. "'")
+            return path
+          end,
+
+          -- you need to build the file yourself: gcc ./revers_binary_num.c -O0 -g -o revers_binary_num
+          -- -g -O0 to include debug symbol
+
+          cwd = "${workspaceFolder}",
+          stopOnEntry = false,
+        },
+      }
+    end
+
+    configure_c_debugger(dap)
+
     -- dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
     -- dap.defaults.fallback.terminal_win_cmd = "new"
 
