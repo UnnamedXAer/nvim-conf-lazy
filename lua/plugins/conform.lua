@@ -15,11 +15,11 @@ return {
           async = true,
           lsp_format = "fallback",
           callback = function(error, did_edit)
-            print("callback")
+            print("------------------------------------callback")
             if error ~= nil then
-              print("manual format: error: " .. error)
+              print("------------manual format: error: " .. error)
             end
-            print("manula format: did_edit: " .. tostring(did_edit))
+            print("-----------------manula format: did_edit: " .. tostring(did_edit))
           end,
         })
       end,
@@ -53,6 +53,14 @@ return {
 
         ["*"] = { "codespell" },
       },
+      formatters = {
+        isort = {
+          command = "isort",
+          args = {
+            "-",
+          },
+        },
+      },
       format_on_save = function(bufnr)
         -- print("format on save: start")
 
@@ -74,7 +82,7 @@ return {
         end
 
         return {
-          timeout_ms = 500,
+          timeout_ms = 750,
           lsp_format = lsp_format_opt,
         }
       end,
