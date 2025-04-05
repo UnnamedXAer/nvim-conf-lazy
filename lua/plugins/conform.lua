@@ -87,7 +87,7 @@ return {
         end
 
         return {
-          timeout_ms = 500,
+          timeout_ms = 750,
           lsp_format = lsp_format_opt,
         }
       end,

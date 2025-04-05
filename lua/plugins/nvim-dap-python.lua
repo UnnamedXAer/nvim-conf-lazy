@@ -36,6 +36,11 @@ return {
     local pythonPath = "python3"
     -- local pythonPath = "venv/bin/python3"
 
+    if string.find(vim.loop.os_uname().sysname:lower(), "windows") then
+      pythonPath = "python"
+      print("windows detected, using python command: '" .. pythonPath .. "'")
+    end
+
     require("dap-python").setup(pythonPath)
 
     local save_before_action = require("common").save_before_action
