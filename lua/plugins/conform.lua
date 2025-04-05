@@ -15,11 +15,11 @@ return {
           async = true,
           lsp_format = "fallback",
           callback = function(error, did_edit)
-            print("------------------------------------callback")
+            print("callback")
             if error ~= nil then
-              print("------------manual format: error: " .. error)
+              print("manual format: error: " .. error)
             end
-            print("-----------------manula format: did_edit: " .. tostring(did_edit))
+            print("manula format: did_edit: " .. tostring(did_edit))
           end,
         })
       end,
@@ -54,6 +54,11 @@ return {
         ["*"] = { "codespell" },
       },
       formatters = {
+        black = {
+          prepend_args = { "--fast" },
+        },
+        -- workaround: isort: error: argument --le/--line-ending: expected one argument
+        -- https://github.com/stevearc/conform.nvim/issues/423#issuecomment-2237672667
         isort = {
           command = "isort",
           args = {
@@ -82,7 +87,7 @@ return {
         end
 
         return {
-          timeout_ms = 750,
+          timeout_ms = 500,
           lsp_format = lsp_format_opt,
         }
       end,
