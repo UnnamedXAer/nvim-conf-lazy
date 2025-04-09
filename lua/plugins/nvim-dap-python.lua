@@ -52,6 +52,7 @@ return {
     local dap = require("dap")
 
     -- to debug with 'venv' activated you need to install debugpy for that venv.
+
     -- pythonPath + ` -m debugpy --version` must work in the shell
     -- e.q. `python3 -m debugpy --version`
 
@@ -64,7 +65,7 @@ return {
         program = "${file}",
         pythonPath = function()
           -- return "/usr/bin/python"
-          return "venv/bin/python3"
+          return ".venv/bin/python3"
         end,
       },
 
@@ -75,7 +76,7 @@ return {
         program = "./main.py",
         pythonPath = function()
           -- return "/usr/bin/python"
-          return "venv/bin/python3"
+          return ".venv/bin/python3"
         end,
       },
 
