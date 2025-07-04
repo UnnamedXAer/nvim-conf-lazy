@@ -53,6 +53,19 @@ return {
 
         ["*"] = { "codespell" },
       },
+      formatters = {
+        black = {
+          prepend_args = { "--fast" },
+        },
+        -- workaround: isort: error: argument --le/--line-ending: expected one argument
+        -- https://github.com/stevearc/conform.nvim/issues/423#issuecomment-2237672667
+        isort = {
+          command = "isort",
+          args = {
+            "-",
+          },
+        },
+      },
       format_on_save = function(bufnr)
         -- print("format on save: start")
 
@@ -74,7 +87,7 @@ return {
         end
 
         return {
-          timeout_ms = 500,
+          timeout_ms = 750,
           lsp_format = lsp_format_opt,
         }
       end,
