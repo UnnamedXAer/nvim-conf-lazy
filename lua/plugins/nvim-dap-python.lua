@@ -7,6 +7,8 @@ return {
   config = function()
     local pythonPath = "python3"
 
+    -- WARN: don't forget to install debugpy in your venv: 'pip install debugpy'
+
     require("dap-python").setup(pythonPath)
 
     local save_before_action = require("common").save_before_action
