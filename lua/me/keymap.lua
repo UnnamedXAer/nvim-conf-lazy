@@ -44,10 +44,10 @@ vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower win
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
 -- resize windows
-vim.keymap.set("n", "<M-,>", "<c-w>5<")
-vim.keymap.set("n", "<M-.>", "<c-w>5>")
-vim.keymap.set("n", "<M-t>", "<c-w>+")
-vim.keymap.set("n", "<M-s>", "<c-w>-")
+vim.keymap.set("n", "<M-,>", "<c-w>5<", { desc = "resize window: width" })
+vim.keymap.set("n", "<M-.>", "<c-w>5>", { desc = "resize window: width" })
+vim.keymap.set("n", "<M-t>", "<c-w>+", { desc = "resize window: height" })
+vim.keymap.set("n", "<M-s>", "<c-w>-", { desc = "resize window: height" })
 
 -- better go down (does not skip wrapped part of a line)
 vim.keymap.set(
