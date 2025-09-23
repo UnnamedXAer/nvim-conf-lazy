@@ -66,6 +66,7 @@ return {
     vim.list_extend(ensure_installed, {
       "stylua",
       "gopls",
+      "delve", -- go debugger
       "black",
       "debugpy",
       "isort",

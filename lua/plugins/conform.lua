@@ -45,6 +45,7 @@ return {
         markdown = { "prettier" },
         graphql = { "prettier" },
         lua = { "stylua" },
+        go = { "gofmt" },
         python = { "isort", "black" },
         -- python = {
         -- "ruff_fix", -- To fix lint errors. (ruff with argument --fix)
@@ -87,7 +88,7 @@ return {
         end
 
         return {
-          timeout_ms = 750,
+          timeout_ms = 500,
           lsp_format = lsp_format_opt,
         }
       end,
