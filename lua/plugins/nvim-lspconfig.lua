@@ -45,14 +45,14 @@ return {
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
         end
 
+        -- This is not Goto Definition, this is Goto Declaration.
+        --  For example, in C this would take you to the header.
+        map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+
         -- Jump to the definition of the word under your cursor.
         --  This is where a variable was first declared, or where a function is defined, etc.
         --  To jump back, press <C-t>.
         map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]definition")
-
-        -- This is not Goto Definition, this is Goto Declaration.
-        --  For example, in C this would take you to the header.
-        map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
         -- Find references for the word under your cursor.
         map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
@@ -68,7 +68,7 @@ return {
 
         -- Fuzzy find all the symbols in your current document.
         --  Symbols are things like variables, functions, types, etc.
-        map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]symbols")
+        map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "Search [D]ocument [S]symbols")
 
         -- Fuzzy find all the symbols in your current workspace.
         --  Similar to document symbols, except searches over your entire project.
