@@ -30,6 +30,16 @@ return {
   config = function()
     -- print("conform config")
 
+    -- function to find the local black executable path.
+    -- local function get_black_path()
+    --   local venv_path = vim.fn.getcwd() .. "/.venv/bin/black"
+    --   if vim.fn.executable(venv_path) == 1 then
+    --     return venv_path
+    --   end
+    --
+    --   return "black" -- fallback to global black
+    -- end
+
     require("conform").setup({
 
       formatters_by_ft = {
@@ -46,26 +56,38 @@ return {
         graphql = { "prettier" },
         lua = { "stylua" },
         go = { "gofmt" },
-        python = { "isort", "black" },
-        -- python = {
-        -- "ruff_fix", -- To fix lint errors. (ruff with argument --fix)
-        -- "ruff_format", -- To run the formatter. (ruff with argument format)
-        -- },
+        -- python = { "isort", "black" },
+        python = {
+          "ruff_fix", -- To fix lint errors. (ruff with argument --fix)
+          "ruff_format", -- To run the formatter. (ruff with argument format)
+        },
 
         ["*"] = { "codespell" },
       },
       formatters = {
-        black = {
-          prepend_args = { "--fast" },
-        },
-        -- workaround: isort: error: argument --le/--line-ending: expected one argument
-        -- https://github.com/stevearc/conform.nvim/issues/423#issuecomment-2237672667
-        isort = {
-          command = "isort",
+        -- black = {
+        --   prepend_args = { "--fast" },
+        --   command = get_black_path(),
+        -- },
+
+        ruff_format = {
+          command = "ruff",
           args = {
+            "format",
+            "--stdin-filename",
+            "$FILENAME",
             "-",
           },
         },
+
+        -- workaround: isort: error: argument --le/--line-ending: expected one argument
+        -- https://github.com/stevearc/conform.nvim/issues/423#issuecomment-2237672667
+        -- isort = {
+        --   command = "isort",
+        --   args = {
+        --     "-",
+        --   },
+        -- },
       },
       format_on_save = function(bufnr)
         -- print("format on save: start")

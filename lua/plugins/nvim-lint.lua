@@ -12,8 +12,9 @@ return {
       python = {
         -- 'flake8',
         -- 'mypy',
-        "pylint",
-        -- "ruff",
+
+        -- "pylint",
+        "ruff",
       },
       javascript = { "eslint_d" },
       typescript = { "eslint_d" },
@@ -22,15 +23,27 @@ return {
       svelte = { "eslint_d" },
     }
 
-    lint.linters.pylint.args = vim.list_extend(lint.linters.pylint.args, {
-      "--disable=C0114,C0115,C0116,C0103,C0413,C0209,R0903,C0415,W0621,R1730,R1731",
-    })
+    -- lint.linters.pylint.args = vim.list_extend(lint.linters.pylint.args, {
+    --   "--disable=C0114,C0115,C0116,C0103,C0413,C0209,R0903,C0415,W0621,R1730,R1731",
+    -- })
     -- W0621 - redefined-outer-name
     -- R0903 - too-few-pulic-methods
     -- C0209 - consider-using-f-string
     -- C0415 - import-outside-toplevel
     -- R1730 - consider-using-min-builtin
     -- R1731 - consider-using-max-builtin
+
+    -- uncomment if you enjoyed with the warnings.
+    -- lint.linters.ruff.args = {
+    --   "check",
+    --   "--force-exclude",
+    --   "--quiet",
+    --   "--stdin-filename",
+    --   "$FILENAME",
+    --   "-",
+    --   "--ignore",
+    --   "D100,D101,D102,D103,N801,N802,N806,PLW0621,UP031",
+    -- }
 
     local lint_autogroup = vim.api.nvim_create_augroup("lint", { clear = true })
 

@@ -67,13 +67,13 @@ return {
       "stylua",
       "gopls",
       "delve", -- go debugger
-      "black",
-      "debugpy",
-      "isort",
+      -- "ruff",
+      -- "black",
+      -- "debugpy",
+      -- "isort",
+      -- "pylint",
       "prettier",
       "eslint_d",
-      "pylint",
-      -- "ruff",
       -- "cpesll",
       "codespell",
     })

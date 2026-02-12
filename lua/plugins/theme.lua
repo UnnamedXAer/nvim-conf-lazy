@@ -1,3 +1,43 @@
+function set_dap_elements()
+  -- https://neovim.io/doc/user/builtin.html#sign_define()
+  vim.fn.sign_define("DapBreakpoint", {
+    text = "", -- nerdfonts icon here
+    texthl = "yellow", -- color of the icon | color or some kind of group
+    linehl = "", -- color of the line text (your code)
+    numhl = "blue", -- color of the line number
+    culhl = "", -- color of the icon defined above when the cursor in on that line
+  })
+
+  vim.fn.sign_define("DapBreakpointCondition", {
+    text = "",
+    texthl = "yellow", -- color of the icon | color or some kind of group
+    linehl = "", -- color of the line text (your code)
+    numhl = "blue", -- color of the line number
+    culhl = "", -- color of the icon defined above when the cursor in on that line
+  })
+
+  vim.fn.sign_define("DapStopped", {
+    text = "",
+    texthl = "red",
+    linehl = "",
+    numhl = "orange",
+  })
+
+  -- vim.fn.sign_define("DapBreakpoint", {
+  --   text = "", -- nerdfonts icon here
+  --   texthl = "DapBreakpointSymbol",
+  --   linehl = "DapBreakpoint",
+  --   numhl = "DapBreakpoint",
+  -- })
+
+  -- vim.fn.sign_define("DapStopped", {
+  --   text = "",
+  --   texthl = "DapStoppedSymbol",
+  --   linehl = "DapBreakpoint",
+  --   numhl = "DapBreakpoint",
+  -- })
+end
+
 return {
   -- {
   --   "ribru17/bamboo.nvim",
@@ -69,72 +109,38 @@ return {
   --   end,
   -- },
 
-  -- quite ok.
+  -- -- -- -- -- -- -- -- --
+  -- {
+  --   "sainnhe/gruvbox-material",
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function()
+  --     -- Optionally configure and load the colorscheme
+  --     -- directly inside the plugin declaration.
+  --
+  --     vim.g.gruvbox_material_better_performance = 1
+  --     vim.g.gruvbox_material_background = "hard" -- soft, medium, hard
+  --     vim.g.gruvbox_material_foreground = "original" --  material, mix, original
+  --     -- vim.g.gruvbox_material_menu_selection_background = "purple"
+  --     -- vim.g.gruvbox_material_cursor = "purple"
+  --
+  --     -- vim.g.gruvbox_material_enable_italic = true
+  --     vim.cmd.colorscheme("gruvbox-material")
+  --
+  --     set_dap_elements()
+  --   end,
+  -- },
+
   {
-    "sainnhe/gruvbox-material",
+    "projekt0n/github-nvim-theme",
+    name = "github-theme",
     lazy = false,
     priority = 1000,
     config = function()
-      -- Optionally configure and load the colorscheme
-      -- directly inside the plugin declaration.
-
-      vim.g.gruvbox_material_better_performance = 1
-      vim.g.gruvbox_material_background = "hard" -- soft, medium, hard
-      vim.g.gruvbox_material_foreground = "original" --  material, mix, original
-      -- vim.g.gruvbox_material_menu_selection_background = "purple"
-      -- vim.g.gruvbox_material_cursor = "purple"
-
-      -- vim.g.gruvbox_material_enable_italic = true
-      vim.cmd.colorscheme("gruvbox-material")
-
-      -- https://neovim.io/doc/user/builtin.html#sign_define()
-      vim.fn.sign_define("DapBreakpoint", {
-        text = "", -- nerdfonts icon here
-        texthl = "yellow", -- color of the icon | color or some kind of group
-        linehl = "", -- color of the line text (your code)
-        numhl = "blue", -- color of the line number
-        culhl = "", -- color of the icon defined above when the cursor in on that line
-      })
-
-      vim.fn.sign_define("DapBreakpointCondition", {
-        text = "",
-        texthl = "yellow", -- color of the icon | color or some kind of group
-        linehl = "", -- color of the line text (your code)
-        numhl = "blue", -- color of the line number
-        culhl = "", -- color of the icon defined above when the cursor in on that line
-      })
-
-      vim.fn.sign_define("DapStopped", {
-        text = "",
-        texthl = "red",
-        linehl = "",
-        numhl = "orange",
-      })
-
-      -- vim.fn.sign_define("DapBreakpoint", {
-      --   text = "", -- nerdfonts icon here
-      --   texthl = "DapBreakpointSymbol",
-      --   linehl = "DapBreakpoint",
-      --   numhl = "DapBreakpoint",
+      -- require("github-theme").setup({
       -- })
-
-      -- vim.fn.sign_define("DapStopped", {
-      --   text = "",
-      --   texthl = "DapStoppedSymbol",
-      --   linehl = "DapBreakpoint",
-      --   numhl = "DapBreakpoint",
-      -- })
+      local theme_style = "github_light"
+      vim.cmd.colorscheme(theme_style)
     end,
   },
-
-  -- CATPPUCCIN
-
-  -- {
-  --   "catppuccin/nvim",
-  --   name = "catppuccin",
-  --   priority = 1000,
-  --   config = function()
-  --     vim.cmd.colorscheme("catppuccin")
-  --   end,
-  -- },
 }
