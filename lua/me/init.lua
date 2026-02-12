@@ -73,3 +73,5 @@ vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,
 require("me.keymap")
 require("me.other")
 require("me.lazy")
+
+vim.api.nvim_create_user_command("Git", "Gitsigns", { desc = "Open Gitsigns command selection window" })

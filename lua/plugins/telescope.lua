@@ -66,8 +66,10 @@ return { -- Fuzzy Finder (files, lsp, etc)
       --
       defaults = {
         file_ignore_patterns = {
-          ".git",
+          -- ".git",
           -- "**/.git/*",
+          "%.git/", -- Matches the .git directory specifically (the % escapes the dot)
+          "%.git$", -- Matches .git if it's the end of the string
         },
         -- hidden = true - is not supported in text grep commands
         vimgrep_arguments = vimGrepArguments,
