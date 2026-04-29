@@ -140,7 +140,17 @@ return {
       -- require("github-theme").setup({
       -- })
       local theme_style = "github_light"
-      vim.cmd.colorscheme(theme_style)
+      local ok, err = pcall(vim.cmd.colorscheme, theme_style)
+
+      -- Recover from stale compiled cache (common after plugin/Nvim upgrades on Windows).
+      if not ok then
+        require("github-theme").compile(true)
+        ok, err = pcall(vim.cmd.colorscheme, theme_style)
+      end
+
+      if not ok then
+        error(err)
+      end
     end,
   },
 }
