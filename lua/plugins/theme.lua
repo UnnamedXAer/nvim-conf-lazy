@@ -39,118 +39,61 @@ function set_dap_elements()
 end
 
 return {
-  -- {
-  --   "ribru17/bamboo.nvim",
-  --   lazy = false,
-  --   priority = 1000,
-  --   config = function()
-  --     require("bamboo").setup({
-  --       -- Main options --
-  --       -- to use the light theme, set `vim.o.background = 'light'`
-  --       style = "vulgaris", -- Choose between 'vulgaris' (regular), 'multiplex' (greener), and 'light'
-  --       toggle_style_key = nil, -- Keybind to toggle theme style. Leave it nil to disable it, or set it to a string, e.g. "<leader>ts"
-  --       toggle_style_list = { "vulgaris", "multiplex", "light" }, -- List of styles to toggle between
-  --       transparent = false, -- Show/hide background
-  --       dim_inactive = false, -- Dim inactive windows/buffers
-  --       term_colors = true, -- Change terminal color as per the selected theme style
-  --       ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
-  --       cmp_itemkind_reverse = false, -- reverse item kind highlights in cmp menu
-  --
-  --       -- Change code style ---
-  --       -- Options are anything that can be passed to the `vim.api.nvim_set_hl` table
-  --       -- You can also configure styles with a string, e.g. keywords = 'italic,bold'
-  --       code_style = {
-  --         comments = { italic = false },
-  --         conditionals = { italic = false },
-  --         keywords = {},
-  --         functions = {},
-  --         namespaces = { italic = false },
-  --         parameters = { italic = false },
-  --         strings = {},
-  --         variables = {},
-  --       },
-  --
-  --       -- Lualine options --
-  --       lualine = {
-  --         transparent = false, -- lualine center bar transparency
-  --       },
-  --
-  --       -- Custom Highlights --
-  --       colors = {}, -- Override default colors
-  --       highlights = {}, -- Override highlight groups
-  --
-  --       -- Plugins Config --
-  --       diagnostics = {
-  --         darker = true, -- darker colors for diagnostic
-  --         undercurl = true, -- use undercurl instead of underline for diagnostics
-  --         background = true, -- use background color for virtual text
-  --       },
-  --     })
-  --
-  --     require("bamboo").load() -- enable theme
-  --   end,
-  -- },
+  "projekt0n/github-nvim-theme",
+  name = "github-theme",
+  lazy = false,
+  priority = 1000,
+  config = function()
+    -- print("Loading github-theme...")
+    -- require("github-theme").setup({})
+    local theme_style = "github_light"
+    local background_color = "light" -- or "dark" for dark mode
 
-  -- EVERFOREST
-
-  -- {
-  --   "neanias/everforest-nvim",
-  --   version = false,
-  --   lazy = false,
-  --   priority = 1000, -- make sure to load this before all the other start plugins
-  --   -- Optional; default configuration will be used if setup isn't called.
-  --   config = function()
-  --     ---@diagnostic disable-next-line: missing-fields
-  --     require("everforest").setup({
-  --       background = "medium",
-  --     })
-  --
-  --     vim.cmd.colorscheme("everforest")
-  --   end,
-  -- },
-
-  -- -- -- -- -- -- -- -- --
-  -- {
-  --   "sainnhe/gruvbox-material",
-  --   lazy = false,
-  --   priority = 1000,
-  --   config = function()
-  --     -- Optionally configure and load the colorscheme
-  --     -- directly inside the plugin declaration.
-  --
-  --     vim.g.gruvbox_material_better_performance = 1
-  --     vim.g.gruvbox_material_background = "hard" -- soft, medium, hard
-  --     vim.g.gruvbox_material_foreground = "original" --  material, mix, original
-  --     -- vim.g.gruvbox_material_menu_selection_background = "purple"
-  --     -- vim.g.gruvbox_material_cursor = "purple"
-  --
-  --     -- vim.g.gruvbox_material_enable_italic = true
-  --     vim.cmd.colorscheme("gruvbox-material")
-  --
-  --     set_dap_elements()
-  --   end,
-  -- },
-
-  {
-    "projekt0n/github-nvim-theme",
-    name = "github-theme",
-    lazy = false,
-    priority = 1000,
-    config = function()
-      -- require("github-theme").setup({
-      -- })
-      local theme_style = "github_light"
+    local function apply_theme()
+      vim.o.background = background_color
       local ok, err = pcall(vim.cmd.colorscheme, theme_style)
+      -- local ok, err = vim.cmd.colorscheme(theme_style)
+
+      -- print("Loading github-theme... ok: ", ok, " err: ", err)
 
       -- Recover from stale compiled cache (common after plugin/Nvim upgrades on Windows).
       if not ok then
+        print("Failed to load theme, recompiling cache and retrying...")
         require("github-theme").compile(true)
         ok, err = pcall(vim.cmd.colorscheme, theme_style)
       end
 
       if not ok then
+        print("Failed to load theme after recompilation: " .. err)
         error(err)
       end
-    end,
-  },
+      -- print("Loading github-theme... end")
+    end
+
+    apply_theme()
+    -- Schedule to ensure it runs after all plugins are loaded.
+    -- It looks like the nvim itself resets the colorscheme (maybe because it infers the colorscheme from the terminal or something) after this config runs, so we need to schedule it to run again after everything is loaded.
+    vim.schedule(apply_theme)
+    -- this is for when nvim is suspended and resumed, it can reset the colorscheme, so we need to reapply it when that happens.
+    -- (Ctrl-Z to suspend, then fg to resume in the terminal)
+    -- vim.api.nvim_create_autocmd({ "VimResume", "VimEnter" }, {
+    --   callback = function()
+    --     print("reapplying theme...")
+    --     apply_theme()
+    --     vim.schedule(apply_theme)
+    --   end,
+    -- })
+
+    vim.api.nvim_create_autocmd("OptionSet", {
+      callback = function()
+        if vim.o.background ~= background_color then
+          vim.schedule(function()
+            apply_theme()
+            -- vim.o.background = background_color
+            -- vim.cmd.colorscheme(theme_style)
+          end)
+        end
+      end,
+    })
+  end,
 }

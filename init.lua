@@ -1,1 +1,29 @@
 require("me")
+
+-- -- debug theme issues
+-- local function dump_theme_state(tag)
+--   local ok, normal = pcall(vim.api.nvim_get_hl, 0, { name = "Normal" })
+--   print(("== %s =="):format(tag))
+--   print("colors_name:", vim.inspect(vim.g.colors_name))
+--   print("background :", vim.o.background)
+--   print("Normal     :", ok and vim.inspect(normal) or "ERR")
+-- end
+--
+-- dump_theme_state("end of init.lua")
+--
+-- vim.api.nvim_create_autocmd("OptionSet", {
+--   pattern = "background",
+--   callback = function()
+--     print("BACKGROUND CHANGED TO:", vim.o.background)
+--     print(debug.traceback())
+--   end,
+-- })
+--
+-- vim.api.nvim_create_autocmd("VimEnter", {
+--   callback = function()
+--     dump_theme_state("VimEnter")
+--     vim.schedule(function()
+--       dump_theme_state("VimEnter scheduled")
+--     end)
+--   end,
+-- })
