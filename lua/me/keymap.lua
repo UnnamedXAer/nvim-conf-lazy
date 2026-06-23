@@ -73,7 +73,7 @@ end)
 
 vim.keymap.set("n", "gh", function()
   vim.lsp.buf.hover()
-end, { remap = false, desc = "Trigger hover popup, use twice to focus that popup to be eable e.g. to scroll it." })
+end, { remap = false, desc = "Trigger hover popup, use twice to focus that popup to be enable e.g. to scroll it." })
 
 vim.keymap.set("n", "<F2>", function()
   vim.lsp.buf.rename()

@@ -1,4 +1,4 @@
-function set_dap_elements()
+local function set_dap_elements()
   -- https://neovim.io/doc/user/builtin.html#sign_define()
   vim.fn.sign_define("DapBreakpoint", {
     text = "", -- nerdfonts icon here
@@ -45,12 +45,45 @@ return {
   priority = 1000,
   config = function()
     -- print("Loading github-theme...")
-    -- require("github-theme").setup({})
+
+    -- local theme_style = "github_light"
     local theme_style = "github_light"
-    local background_color = "light" -- or "dark" for dark mode
+    local background_theme = "light" -- or "dark" for dark mode
+    local github_theme_config = {
+      options = {
+        dark_float = {
+          flats = true,
+        },
+      },
+      -- options = {
+      --   transparent = false,
+      --
+      -- },
+      specs = {
+        -- pallets = {
+        github_light = {
+          -- bg0 = "#fff9e5", -- Brighten floats
+          bg0 = "#fef9e7", -- Brighten floats
+          -- bg1 = "#000814", -- background
+          -- bg2 = "#200818", -- Colorcolumn folds
+          -- bg3 = "#001122", -- Cursor line
+          -- bg4 = "#333333", -- Conceal
+          -- fg3 = "#333366", -- LineNr, LspInlayHints
+          -- fg3 = "#333366", -- LineNr, LspInlayHints
+          -- sel1 = "#885511", -- IncSearch bg
+          -- sel2 = "#cccc33", -- Search bg
+        },
+      },
+    }
+
+    local palette = require("github-theme.palette").load(theme_style)
+
+    -- print(vim.inspect(palette))
 
     local function apply_theme()
-      vim.o.background = background_color
+      require("github-theme").setup(github_theme_config)
+
+      vim.o.background = background_theme
       local ok, err = pcall(vim.cmd.colorscheme, theme_style)
       -- local ok, err = vim.cmd.colorscheme(theme_style)
 
@@ -66,7 +99,27 @@ return {
       if not ok then
         print("Failed to load theme after recompilation: " .. err)
         error(err)
+        return
       end
+
+      -- Make LSP/tooltips/floating windows stand out a bit
+      -- local function set_float_style()
+      -- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#f8f8f1" })
+      -- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#e0ebc0" })
+      --   vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#e4f8df" })
+      --   -- vim.api.nvim_set_hl(0, "FloatBorder", { fg = "#d0d7de", bg = "#f8f8f1" })
+      --   vim.api.nvim_set_hl(0, "FloatBorder", { fg = "yellow", bg = "#f8f8f1" })
+      --   -- vim.api.nvim_set_hl(0, "FloatBorder", { bg = "#f6f8fa" })
+      --   -- vim.api.nvim_set_hl(0, "FloatTitle", { fg = "#24292f", bg = "#f6f8fa", bold = true })
+      -- end
+      --
+      -- set_float_style()
+      --
+      -- -- Also apply to diagnostic popups
+      -- vim.diagnostic.config({
+      --   float = { border = "single" },
+      -- })
+
       -- print("Loading github-theme... end")
     end
 
@@ -86,7 +139,7 @@ return {
 
     vim.api.nvim_create_autocmd("OptionSet", {
       callback = function()
-        if vim.o.background ~= background_color then
+        if vim.o.background ~= background_theme then
           vim.schedule(function()
             apply_theme()
             -- vim.o.background = background_color
