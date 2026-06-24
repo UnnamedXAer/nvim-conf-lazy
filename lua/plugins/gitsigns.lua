@@ -36,7 +36,7 @@ return { -- Adds git related signs to the gutter, as well as utilities for manag
 
         -- for full list of available actions, see: https://github.com/lewis6991/gitsigns.nvim/blob/main/doc/gitsigns.txt
 
-        map("n", "hp", gs.preview_hunk, { desc = "preview hunk (Gitsigns)" })
+        map("n", "Hp", gs.preview_hunk, { desc = "preview hunk (Gitsigns)" })
 
         map("n", "<leader>hs", gs.stage_hunk, { desc = "stage (unstage) hunk((Gitsigns)" })
         map("v", "<leader>hs", function()
